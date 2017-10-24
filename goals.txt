@@ -23,4 +23,7 @@ Input:
   Direction
   
 Output:
+
+Text file with the results.
+Connection between the two Pi's
   
