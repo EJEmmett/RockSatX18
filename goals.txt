@@ -1,0 +1,14 @@
+//PYTHONS
+
+-Psuedo-code
+-Psuedo-code Flowchart
+
+-PDR Slide 33
+  Include (where applicable):
+  Drawing(s) – dimensioned and labeled...           Pseudo-code Flowchart
+  Power and data needs...                           N/A
+  Mechanical and electrical interfaces...           ---
+  Weight...                                         N/A
+  Hardware required...                              2 Raspberry Pi Zeros
+  Current issues...                                 ---
+  Other                                             ---
