@@ -12,3 +12,15 @@
   Hardware required...                              2 Raspberry Pi Zeros
   Current issues...                                 ---
   Other                                             ---
+
+Input:
+  Temperature
+  Radiation level
+  
+  (stationary)
+  Speed
+  Distance
+  Direction
+  
+Output:
+  
