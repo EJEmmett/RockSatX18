@@ -1,4 +1,5 @@
 //PYTHONS
+//MAKE SURE THAT THE PI'S TIMES ARE SYNCED
 
 -Psuedo-code
 -Psuedo-code Flowchart
