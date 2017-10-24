@@ -18,12 +18,14 @@ Input:
   Radiation level
   
   (stationary)
-  Speed
-  Distance
-  Direction
+  3 Lazers (0 or 1)
   
 Output:
-
+  Speed (off lazer to next on lazer) 
+  Distance ()
+  Size of object (speed * time from {lazer on to lazer off})
+  Direction (which lazer is activated)
+  
 Text file with the results.
 Connection between the two Pi's
   
