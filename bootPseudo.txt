@@ -2,12 +2,16 @@
 
 import os
 import time from timer
-//this code imports the modules
+//this code imports the modules like time and operating system
 
-initialize file creation
+declare string bootFile
+set bootfile = "destination/destination2/boot.txt"
+bootFile version = 1
+open file to be written in
 
-run ping1 print results in bootFileResults.txt
 print time in bootFileResults.txt
+sleep //so that they don't print on top of eachother
+run ping other pi print results in boot.txt
 
 send results to home reciver
 //the code above will be more then one line 
