@@ -4,6 +4,8 @@ import os
 import time from timer
 //this code imports the modules
 
+initialize file creation
+
 run ping1 print results in bootFileResults.txt
 print time in bootFileResults.txt
 
