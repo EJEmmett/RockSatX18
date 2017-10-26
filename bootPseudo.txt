@@ -1,8 +1,8 @@
 //Pseudo code for boot of primary cubesat
 
 //Calls necessary libraries
-//IMPORT os
-//IMPORT time FROM timer
+IMPORT os
+IMPORT time FROM timer
 
 //Creates initial values for needed variables
 SET bootPing AS "destination/destination2/bootPing.txt"
