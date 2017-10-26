@@ -10,5 +10,6 @@ file = open(bootFile, "w")
 file.write("The boot time was: " + time.strftime('%a %H:%M:%S %Y.') + '\n')
 time.sleep(0.5)
 os.systen("ping -c 1 127.0.0.1 >> boot.txt") #The IP address will be changed acourding to the pi's address.
+file.write('\n' + "It worked!")
 
 # once the syntax for the irdium network is found this part will sen this file.
