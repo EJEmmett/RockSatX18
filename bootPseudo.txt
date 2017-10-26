@@ -1,19 +1,27 @@
-//speudo code for boot for both of the cubesat pi's
+//Pseudo code for boot of primary cubesat
 
-import os
-import time from timer
-//this code imports the modules like time and operating system
+//Calls necessary libraries
+IMPORT os
+IMPORT time FROM timer
 
-declare string bootFile
-set bootfile = "destination/destination2/boot.txt"
-bootFile version = 1
-open file to be written in
+//Creates initial values for needed variables
+SET bootPing AS "destination/destination2/bootPing.txt"
+SET bootTime AS "destination/destination2/bootTime.txt"
+SET bootFileVersion = 1.0
+SET bootTimeVersion = 1.0
 
-print time in bootFileResults.txt
-sleep //so that they don't print on top of eachother
-run ping other pi print results in boot.txt
+//Opens bootTime, logs the time, then closes the file
+CALL openFile WITH bootTime
+CALL writeFile WITH time
+CALL closeFile
 
-send results to home reciver
-//the code above will be more then one line 
+//Pauses the program for a second or two
+CALL sleep WITH 1
 
-end code
+//Opens bootPing, takes the output of OS ping and logs it, then closes the file
+CALL openFile WITH bootFile
+SET ping AS "CALL osPing"
+CALL writeFile WITH ping
+CALL CloseFile
+
+//Leave blank until it has been decided what form of device communications is going to happen.
