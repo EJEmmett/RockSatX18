@@ -1,0 +1,27 @@
+//Pseudo code for boot of secondary cubesat
+
+//Calls necessary libraries
+IMPORT os
+IMPORT time FROM timer
+
+//Creates initial values for needed variables
+SET bootPing AS "destination/destination2/bootPing.txt"
+SET bootTime AS "destination/destination2/bootTime.txt"
+SET bootFileVersion = 1.0
+SET bootTimeVersion = 1.0
+
+//Opens bootTime, logs the time, then closes the file
+CALL openFile WITH bootTime
+CALL writeFile WITH time
+CALL closeFile
+
+//Pauses the program for a second or two
+CALL sleep WITH 1
+
+//Opens bootPing, takes the output of OS ping and logs it, then closes the file
+CALL openFile WITH bootFile
+SET ping AS "CALL osPing"
+CALL writeFile WITH ping
+CALL CloseFile
+
+//Leave blank until it has been decided what form of device communications is going to happen.
