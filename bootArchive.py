@@ -4,6 +4,8 @@ from time import gmtime, strftime
 import os
 import time
 
+#If we decide to make sure the ip's are right then we need to run this code first.
+#os.system("ifcofig eth0 ****.****.***.****")
 bootFile = "root/Desktop/boot.txt" #This can change based on how we decied to make the file system.
 bootFileVersion = 1
 file = open(bootFile, "w")
