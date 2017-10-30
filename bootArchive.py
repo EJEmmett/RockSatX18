@@ -11,7 +11,7 @@ bootFileVersion = 1
 file = open(bootFile, "w")
 file.write("The boot time was: " + time.strftime('%a %H:%M:%S %Y.') + '\n')
 time.sleep(0.5)
-os.systen("ping -c 1 127.0.0.1 >> boot.txt") #The IP address will be changed acourding to the pi's address.
+os.systen("ping -c 2 127.0.0.1 >> boot.txt") #The IP address will be changed acourding to the pi's address.
 file.write('\n' + "It worked!")
 time.sleep(1.25)
 os.system("/etc/init.d/boot_script.sh restart")#This restarts the skript to run this on boot, so we don't have to.
