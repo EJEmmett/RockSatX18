@@ -69,3 +69,22 @@ while time2 > 0 #we need to find a way to stop the program using time.
 			
 #notes: their is many ways we can do this we could slpit into 3 files, one for each laser or we could do multiple whiles
 # The most imporntnat thing we need to figure out right now is how to end the while loop if at all.
+#Yes we should end the while loop eventually or we might get gibberish. We cou;d try dictionary mapping or classes? 
+# I was looking for a switch statement but Python doesn't like those. 
+#	Found something else. Think this could work? 
+#	def zero():
+ #   return "zero"
+
+#def one():
+ #   return "one"
+
+#def numbers_to_functions_to_strings(argument):
+   # switcher = {
+      #  0: zero,
+     #   1: one,
+    #    2: lambda: "two",
+   # }
+    # Get the function from switcher dictionary
+  #  func = switcher.get(argument, lambda: "nothing")
+ #   # Execute the function
+#    return func()
