@@ -72,7 +72,7 @@ while time2 > 0 #we need to find a way to stop the program using time.
 	
 	
 	
-#Yes we should end the while loop eventually or we might get gibberish. We cou;d try dictionary mapping or classes? 
+#Yes we should end the while loop eventually or we might get gibberish. We could try dictionary mapping or classes? 
 # I was looking for a switch statement but Python doesn't like those. 
 #	Found something else. Think this could work? 
 #	def zero():
