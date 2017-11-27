@@ -94,8 +94,9 @@ while masterTime > 0:
 				
 			
 #notes: their is many ways we can do this we could slpit into 3 files, one for each laser or we could do multiple whiles
-# The most imporntnat thing we need to figure out right now is how to end the while loop if at all.
-	
+#The most imporntnat thing we need to figure out right now is how to end the while loop if at all.
+#Written by Samuel Schatz for Rock Sat 2018 Janus.			
+
 	
 	
 #Yes we should end the while loop eventually or we might get gibberish. We could try dictionary mapping or classes? 
