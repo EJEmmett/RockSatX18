@@ -9,25 +9,20 @@ IMPORT minmialmodbus
 
 SET instrument1Results = "#path to# instrument1Results.txt"
 SET instrument2Results = "#path to# instrument2Results.txt"
-SET instrument3Results = "#path to# instrument3Results.txt"
 SET masterCopy = "#path to# masterCopy.txt"
 
 
 SET instrument1 = minimalmodbus.instrument('//'GPIO port that lasers is associated too' ,  then the slave address(should be 0)//)
 SET instrument2 = minimalmodbus.instrument('//'GPIO port that lasers is associated too' ,  then the slave address(should be 0)//)
-SET instrument3 = minimalmodbus.instrument('//'GPIO port that lasers is associated too' ,  then the slave address(should be 0)//)
 SET time = time.strftime('%H:%M:%S')
 SET distance1 = product of the first laser
 SET distance2 = product of the second laser
-SET distance3 = product of the third laser
 
 //This tells us when we review the results the time it started recording.
 open instrument1Results
 write to file instrument1Results("This is the start time:", time)
 open instrument2Results
 write to file instrument2Results("This is the start time:", time)
-open instrument3Results
-write to file instrument3Results("This is the start time:", time)
 open masterCopy
 write to file masterCopy("This is the start time:", time)
 
@@ -55,16 +50,6 @@ while time > 0 && time < 15
 
 	else if distance2 == 0
 		print "nothing is in the seconds lasers range" >> instrument2Results.txt
-	
-	else if distance3 < 0
-		OPEN file instrument3Results.txt
-		RECORD time it occoured print
-		WRITE_DATA to instrument3Results.txt	
-		WRITE_DATA to masterCopy
-			WHEN done recording print time, instrument3Results
-	
-	else if distance3 == 0
-		print "nothing is in the third lasers range" >> instrument3Results.txt
 	end if	
 END while
 	
