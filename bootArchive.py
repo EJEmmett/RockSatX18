@@ -4,8 +4,12 @@ from time import gmtime, strftime
 import os
 import time
 
+s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+s.connect(("8.8.8.8", 800))
+ipAddr = s.getsockname()[0]
+if ip != '192.168.150.2'
+  os.system("ifconfig eth0 192.168.150.2")#This will be changed when we know what ip addr we are using for the systems
 #If we decide to make sure the ip's are right then we need to run this code first.
-#os.system("ifcofig eth0 ****.****.****.****")
 bootFile = "root/Desktop/boot.txt" #This can change based on how we decied to make the file system.
 bootFileVersion = 1
 file = open(bootFile, "w")
