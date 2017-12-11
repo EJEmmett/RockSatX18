@@ -19,5 +19,3 @@ os.systen("ping -c 2 127.0.0.1 >> boot.txt") #The IP address will be changed aco
 file.write('\n' + "It worked!")
 time.sleep(1.25)
 os.system("/etc/init.d/boot_script.sh restart")#This restarts the skript to run this on boot, so we don't have to.
-
-# once the syntax for the irdium network is found this part will sen this file.
