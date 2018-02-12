@@ -1,4 +1,4 @@
-# This file is for assurance purposes and to help us see when the two pi's conect.
+# This file is for assurance purposes and to help us see when the two pi's conect. 
 import socket
 from time import gmtime, strftime
 import os
