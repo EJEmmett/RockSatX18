@@ -11,8 +11,8 @@ instrument2results = "/results/instrument2results.txt"
 masterCopy = "/results/masterCopyLog.txt"
 #The one above gives a master list of all imporntnat times that happen.
 
-instrument1 = minimalmodbus.instrument(#'GPIO port that lasers is associated too'# ,  #then the slave address(should be 0)#)
-instrument2 = minimalmodbus.instrument(#'GPIO port that lasers is associated too'# ,  #then the slave address(should be 0)#)
+instrument1 = minimalmodbus.instrument(#'USB port that lasers is associated too'# ,  #then the slave address(should be 0)#)
+instrument2 = minimalmodbus.instrument(#'USB port that lasers is associated too'# ,  #then the slave address(should be 0)#)
 masterTime = time.strftime('%H:%M:%S')
 startTime = time.strftime('%S')
 endTime = time.strftime('%S')
