@@ -2,7 +2,6 @@ import time from timer
 import strftime from time
 import datetime
 import os
-import RPi.GPIO as GPIO
 import minmialmodbus
 from time import sleep
 
