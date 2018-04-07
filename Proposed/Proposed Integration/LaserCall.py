@@ -15,11 +15,11 @@ class laser:
         self.secondaryInstance = ""
     def measure(self):
         if primaryPass != 0:
-            primaryInstance = (f"Instance occurred at: {masterTime}")
+            primaryInstance = ('Instance occurred at: {}'.format(masterTime))
             time.sleep(1)
         if secondaryPass != 0:
-            secondaryInstance = (f"Instance occurred at: {masterTime}")
+            secondaryInstance = ('Instance occurred at: {}'.format(masterTime))
             time.sleep(1)
 
-        combinedInstance = f"{primaryInstance}|{secondaryInstance}"
+        combinedInstance = '{}|{}'.format(primaryInstance,secondaryInstance)
         return combinedInstance
