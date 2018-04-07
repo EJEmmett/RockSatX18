@@ -7,6 +7,7 @@ outputVersion = 1
 index = 0
 max = 125
 
+
 camera.sharpness = 0
 camera.contrast = 0
 camera.brightness = 50
@@ -24,10 +25,10 @@ camera.hflip = False
 camera.vflip = False
 camera.crop = (0.0, 0.0, 1.0, 1.0)
 
-time.sleep(80)
+sleep(125)
 while(index < max):
-	pictureFileName = pictureFileName.replace("#", str(outputVersion))
-	camera.capture("pic#.jpg")
-	index += 1
-	outputVersion += 1
-	time.sleep(7)
+    pictureFileName1 = pictureFileName.replace("#", str(outputVersion))
+    camera.capture(pictureFileName1)
+    index += 1
+    outputVersion += 1
+    sleep(7)
