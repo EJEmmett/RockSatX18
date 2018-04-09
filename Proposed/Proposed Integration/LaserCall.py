@@ -1,4 +1,5 @@
 import time
+from time import sleep
 import minimalmodbus as mini
 
 class laser:
@@ -18,10 +19,10 @@ class laser:
 
         if primaryPass < 1000:
             primaryInstance = ('Instance occurred at: {}'.format(masterTime))
-            time.sleep(.5)
+            sleep(.5)
         if secondaryPass < 1000:
             secondaryInstance = ('Instance occurred at: {}'.format(masterTime))
-            time.sleep(.5)
+            sleep(.5)#we need to make sure that we make the time in our code and the U2 pi's code are uniform with eachother.
 
         combinedInstance = '{}|{}'.format(primaryInstance,secondaryInstance)
         return combinedInstance
