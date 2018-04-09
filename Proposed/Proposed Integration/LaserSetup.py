@@ -1,5 +1,8 @@
 import serial
 from LaserCall import laser
+import time
+from time import sleep
+
 ser = serial.Serial(port='/dev/ttyUSB0',19200)
 l = laser()
 out = ""
@@ -13,7 +16,7 @@ def sendMessage(m):
     ser.write('AT')
     if ser.inWaiting()>0:
         ser.write('AT+SDBWRT({})\r\n'.format(m).encode('utf-8'))
-        time.sleep(1)
+        sleep(1)
         ser.write('AT+SBDIX\r\n'.encode('utf-8'))
         if ser.in_waiting!=0:
             ser.reset_input_buffer()
