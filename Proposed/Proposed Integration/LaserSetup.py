@@ -1,6 +1,5 @@
 import serial
 from LaserCall import laser
-import time
 from time import sleep
 
 ser = serial.Serial(port='/dev/ttyUSB0',19200)
