@@ -14,9 +14,11 @@ class laser:
         primaryPass = primaryInstrument.read_register(24, functioncode = 4)
         secondaryPass = secondaryInstrument.read_register(24, functioncode = 4)
         if primaryPass < 1000:
+            masterTime = time.strftime('%H:%M:%S')
             primaryInstance = ('Instance occurred at: {}'.format(masterTime))
             sleep(.5)
         if secondaryPass < 1000:
+            masterTime = time.strftime('%H:%M:%S')
             secondaryInstance = ('Instance occurred at: {}'.format(masterTime))
             sleep(.5)#we need to make sure that we make the time in our code and the U2 pi's code are uniform with eachother.
         combinedInstance = '{}|{}'.format(primaryInstance,secondaryInstance)
