@@ -1,7 +1,5 @@
-# RocksatX18
+# RocksatX-18
+Capitol Technology University's project for NASA
 
-
-This the Read Me for the RockSatX18 project. Here's what you need to know about the project.
-
-Will use MinimalModBus for the lazers, https://github.com/pyhys/minimalmodbus 
-
+## Utilizes
+[VL53L0X_rasp_python](https://github.com/johnbryanmoore/VL53L0X_rasp_python) by johnbryanmoore
