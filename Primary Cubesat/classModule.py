@@ -68,7 +68,7 @@ class Iridium(object):
         if(!m):
             pass
 
-        self.ser.write('AT+SDBWRT({})\r'.format(m).encode())
+        self.ser.write('AT+SDBWT={}\r'.format(m).encode())
         sleep(1)
         self.ser.write('AT+SBDIX\r'.encode())
         returned = self.ser.read(self.ser.in_waiting).strip().split('\n')
