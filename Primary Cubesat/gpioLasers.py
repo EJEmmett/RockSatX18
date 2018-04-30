@@ -1,4 +1,5 @@
-import time
+from time import sleep
+from datetime import datetime
 import serial
 import VL53L0X
 import RPi.GPIO as GPIO
@@ -42,11 +43,11 @@ class Lasers(object):
         distance1 = self.laser1.get_distance()
         distance2 = self.laser2.get_distance()
         if (distance1 < 100):
-            instance = ('Laser One passed at: {}'.format(time.strftime('%H:%M:%S')))
-            time.sleep(.5)
+            instance = ('Laser One passed at: {}'.format(datetime.now().strftime('%H:%M:%S')))
+            sleep(.5)
         elif (distance2 < 100):
-            instance = ('Laser Two passed at: {}'.format(time.strftime('%H:%M:%S')))
-            time.sleep(.5)
+            instance = ('Laser Two passed at: {}'.format(datetime.now().strftime('%H:%M:%S')))
+            sleep(.5)
         if instance:
             with open("Lasers.txt", "a") as f:
                 f.write(instance+"\n")
@@ -61,8 +62,10 @@ class Lasers(object):
 class Iridium(object):
     def __init__(self):
         self.ser = serial.Serial(port='/dev/ttyUSB0', baudrate=19200, xonxoff=True)
-        self.ser.close()
-        self.ser.open()
+
+    def broadcast(self):
+        self.ser.write('AT+SBDIX\r'.encode())
+        sleep(.5)
 
     def sendMessage(self, m):
         self.ser.write('AT+SDBWT={}\r'.format(m).encode())
@@ -70,10 +73,14 @@ class Iridium(object):
         self.ser.write('AT+SBDIX\r'.encode())
         returned = self.ser.read(self.ser.in_waiting).strip().split('\n')
 
-        if(isinstance(returned,list) and len(returned)>1):
+        if(isinstance(returned, list) and len(returned)>1):
             if(len(returned)>2):
-                if(returned[1]!='0'):
+                if(returned[1] is not '0'):
                     self.sendMessage(m)
+                else:
+                    pass
+            else:
+                self.sendMessage(m)
         else:
             self.sendMessage(m)
 
