@@ -1,13 +1,7 @@
 from minimalLasers import Iridium, Laser
-from subprocess import call
 from time import sleep
 from multiprocessing import Process, SimpleQueue
 
-#Disable USB while launching
-call(["echo '1-1' | sudo tee /sys/bus/usb/drivers/usb/unbind"])
-sleep(20)
-call(["echo '1-1' | sudo tee /sys/bus/usb/drivers/usb/bind"])
-sleep(10)
 #Class instancing
 iridium = Iridium()
 lasers = Laser()
@@ -19,7 +13,7 @@ broadcast = Process(target=iridium.broadcast)
 laserList.start()
 broadcast.start()
 
-sleep(50)
+sleep(200)
 
 #Process close
 broadcast.join()
