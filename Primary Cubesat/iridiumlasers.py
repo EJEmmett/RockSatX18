@@ -5,10 +5,7 @@ import serial
 
 class Iridium(object):
     def __init__(self):
-        self.escapes = ''.join([chr(char) for char in range(1, 32)])
         self.ser = serial.Serial(port='/dev/ttyUSB0', baudrate=19200, xonxoff=True)
-
-    def flush(self):
         self.ser.reset_input_buffer()
         self.ser.reset_output_buffer()
 
@@ -16,25 +13,30 @@ class Iridium(object):
         self.ser.write('AT+SBDWRT=I\'m alive'.encode())
         sleep(.1)
         self.ser.write('AT+SBDIX\r'.encode())
-        self.flush()
+        self.ser.flush()
 
     def sendMessage(self, m):
         self.ser.write('AT+SBDWRT={}\r'.format(m).encode())
         sleep(.1)
         self.ser.reset_input_buffer()
         self.ser.write('AT+SBDIX\r'.encode())
-        returned = self.ser.read(self.ser.in_waiting).decode()
-        returned = returned.translate(None, self.escapes)
-        self.flush()
-        #Write a better checking system
+        strip = str.maketrans( '', '', '\r\n,')
+        returned = self.ser.read(size=self.ser.in_waiting).decode().translate(strip).split(" ")
+        self.ser.flush()
+
+        if returned is not None:
+            if len(returned) > 1:
+                if returned[0] == '+SBDIX:':
+                    if returned[1] != '0':
+                        self.sendMessage(m)
 
 class Laser(object):
     def __init__(self):
         mini.BAUDRATE=115200
-        self.primaryInstrument = mini.Instrument("/dev/ttyUSB1",1,mode='rtu')
-        self.secondaryInstrument = mini.Instrument("/dev/ttyUSB2",2,mode='rtu')
+        self.primaryInstrument = mini.Instrument("/dev/ttyUSB1", 1, mode='rtu')
+        self.secondaryInstrument = mini.Instrument("/dev/ttyUSB2", 2, mode='rtu')
 
-    def measure(self):
+    def measure(self,q):
         primaryPass = self.primaryInstrument.read_register(24, functioncode = 4)
         secondaryPass = self.secondaryInstrument.read_register(24, functioncode = 4)
         instance = None
