@@ -1,4 +1,4 @@
-from iridiumlasers import Iridium, Laser
+from functions import Iridium, Laser
 from time import sleep
 from multiprocessing import Process, Queue
 

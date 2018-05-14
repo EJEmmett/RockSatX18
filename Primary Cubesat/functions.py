@@ -22,7 +22,8 @@ class Iridium(object):
         self.ser.write('AT+SBDIX\r'.encode())
         strip = str.maketrans( '', '', '\r\n,')
         returned = self.ser.read(size=self.ser.in_waiting).decode().translate(strip).split(" ")
-        self.ser.flush()
+        self.ser.reset_input_buffer()
+        self.ser.reset_output_buffer()
 
         if returned is not None:
             if len(returned) > 1:
