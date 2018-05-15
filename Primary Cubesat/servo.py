@@ -1,4 +1,4 @@
-import time
+from time import sleep
 import RPi.GPIO as GPIO
 
 # Set mode to physical pin slot
@@ -16,7 +16,7 @@ while True:
     # Change to open
     p.ChangeDutyCycle(10)
     #wait for open
-    time.sleep(.4)
+    sleep(.4)
     # Return to closed
     p.ChangeDutyCycle(5)
 
