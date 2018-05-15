@@ -19,7 +19,7 @@ def main():
     #Process close
     broadcast.join()
 
-    while 1:
+    while True:
         iridium.sendMessage(laserQueue.get())
 
 main()

@@ -10,13 +10,14 @@ class Iridium(object):
         self.ser.reset_output_buffer()
 
     def broadcast(self):
-        self.ser.write('AT+SBDWRT=I\'m alive'.encode())
-        sleep(.1)
-        self.ser.write('AT+SBDIX\r'.encode())
-        self.ser.flush()
+        while True:
+            self.ser.write('AT+SBDWRT=I\'m alive'.encode())
+            sleep(.1)
+            self.ser.write('AT+SBDIX\r'.encode())
+            self.ser.flush()
 
     def sendMessage(self, m):
-        self.ser.write('AT+SBDWRT={}\r'.format(m).encode())
+        self.ser.write(('AT+SBDWRT= ' + m + '\r').encode())
         sleep(.1)
         self.ser.reset_input_buffer()
         self.ser.write('AT+SBDIX\r'.encode())
@@ -43,9 +44,9 @@ class Laser(object):
         instance = None
 
         if primaryPass is not 0:
-            instance = ('Laser 1 passed at: {}'.format(datetime.now().strftime('%H:%M:%S')))
+            instance = ('Laser 1 passed at: ' + datetime.now().strftime('%H:%M:%S'))
         if secondaryPass is not 0:
-            instance = ('Laser 2 was passed at: {}'.format(datetime.now().strftime('%H:%M:%S')))
+            instance = ('Laser 2 was passed at: ' + datetime.now().strftime('%H:%M:%S'))
 
         if instance is not None:
             with open("Lasers.txt", "a") as f:
