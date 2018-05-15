@@ -12,5 +12,5 @@
 # By default this script does nothing.
 
 sudo python3 /home/pi/IridiumMain.py ; /home/pi/functions.py ; /home/pi/main.py &
-
+ 
 exit 0
