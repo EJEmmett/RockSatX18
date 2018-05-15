@@ -12,13 +12,15 @@ p = GPIO.PWM(7, 50)
 #DutyCycle = PulseWidth/(1/frequency) = PulseWidth * frequency
 p.start(5)
 
-while True:
-    # Change to open
-    p.ChangeDutyCycle(10)
-    #wait for open
-    sleep(.4)
-    # Return to closed
-    p.ChangeDutyCycle(5)
-
+if i < 30:
+    while True:
+        # Change to open
+        p.ChangeDutyCycle(10)
+        #wait for open
+        sleep(15)#this is the time that I thought we decided on?
+        # Return to closed
+        p.ChangeDutyCycle(5)
+        i = i + 1
+        
 p.stop()
 GPIO.cleanup()
