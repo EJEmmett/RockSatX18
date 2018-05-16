@@ -5,7 +5,7 @@ RUN apt-get update ; apt-get upgrade
 
 RUN touch /home/pi/masterEdits.txt
 
-RUN apt-get install python3 >> /home/pi/masterEdits.txt ; apt-get install python-pip /home/pi/masterEdits.txt
+RUN apt-get install python3 >> /home/pi/masterEdits.txt ; apt-get install python-pip /home/pi/masterEdits.txt ; pip install pygame
 
 RUN apt-get install python3-picamera >> /home/pi/masterEdits
 
