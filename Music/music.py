@@ -42,4 +42,4 @@ mixer.music.play(0)
 s(300)
 mixer.stop()
 
-printf("finished")
+print("finished")
