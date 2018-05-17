@@ -2,7 +2,7 @@ from pygame import mixer
 from time import sleep as s
 
 file1 = '/home/pi/Music/'
-file2 = '/home/pi/Music/'
+file2 = '/home/pi/Music/Starman.m4a'
 file3 = 'home/pi/Music/hoe_cakes.mp3'
 file4 = '/home/pi/Music/'
 file5 = '/home/pi/Music/'
