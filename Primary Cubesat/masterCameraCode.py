@@ -5,7 +5,7 @@ camera = picamera.PiCamera()
 pictureFileName = "pic#.jpg"
 outputVersion = 1
 index = 0
-max = 10
+max = 35
 
 camera.sharpness = 0
 camera.contrast = 0
@@ -30,5 +30,5 @@ while(index < max):
     camera.capture(pictureFileName1)
     index += 1
     outputVersion += 1
-    sleep(2)
+    sleep(7)
 
