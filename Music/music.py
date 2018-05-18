@@ -1,11 +1,11 @@
 from pygame import mixer
 from time import sleep as s
 
-file1 = '/home/pi/Music/'
-file2 = '/home/pi/Music/Starman.m4a'
-file3 = '/home/pi/Music/hoe_cakes.mp3'
-file4 = '/home/pi/Music/'
-file5 = '/home/pi/Music/'
+file1 = '/home/pi/Music/danger_zone.mp3'
+file2 = '/home/pi/Music/Starman.mp3'
+file3 = '/home/pi/Music/cakes.mp3'
+file4 = '/home/pi/Music/staying_alive.mp3'
+file5 = '/home/pi/Music/space_oddity.mp3'
 
 mixer.init()
 
