@@ -24,7 +24,6 @@ s(180)
 mixer.music.load(file4)
 mixer.music.play()
 s(180)
-mixer.stop()
 
 mixer.music.load(file5)
 mixer.music.play()

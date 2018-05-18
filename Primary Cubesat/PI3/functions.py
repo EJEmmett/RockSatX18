@@ -3,9 +3,9 @@ from datetime import datetime
 import minimalmodbus as mini
 import serial
 
-class Iridium(object):
-    def __init__(self):
-        self.ser = serial.Serial(port='/dev/ttyUSB0', baudrate=19200, xonxoff=True)
+class Iridium:
+    def __init__(self, port):
+        self.ser = serial.Serial(port=port, baudrate=19200, xonxoff=True)
         self.ser.reset_input_buffer()
         self.ser.reset_output_buffer()
 
@@ -32,23 +32,20 @@ class Iridium(object):
                     if returned[1] != '0':
                         self.sendMessage(m)
 
-class Laser(object):
-    def __init__(self):
+class Laser:
+    def __init__(self, port):
         mini.BAUDRATE=115200
-        self.primaryInstrument = mini.Instrument("/dev/ttyUSB1", 1, mode='rtu')
-        self.secondaryInstrument = mini.Instrument("/dev/ttyUSB2", 2, mode='rtu')
+        self.primaryInstrument = mini.Instrument(port, 1, mode='rtu')
+        self.primaryInstrument.write_register(4, value=20, functioncode=6)
 
     def measure(self,q):
         primaryPass = self.primaryInstrument.read_register(24, functioncode = 4)
-        secondaryPass = self.secondaryInstrument.read_register(24, functioncode = 4)
         instance = None
 
         if primaryPass is not 0:
-            instance = ('Laser 1 passed at: ' + datetime.now().strftime('%H:%M:%S'))
-        if secondaryPass is not 0:
-            instance = ('Laser 2 was passed at: ' + datetime.now().strftime('%H:%M:%S'))
+            instance = ('Laser passed at: ' + datetime.now().strftime('%H:%M:%S'))
 
         if instance is not None:
-            with open("Lasers.txt", "a") as f:
+            with open("Laser.txt", "a") as f:
                 f.write(instance+"\n")
             q.put(instance)

@@ -1,0 +1,4 @@
+tar xvfz pygame-1.9.1release.tar.gz
+cd pygame-1.9.1release
+python3 setup.py build
+python3 setup.py install --user

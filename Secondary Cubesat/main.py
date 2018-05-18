@@ -7,7 +7,7 @@ def main():
     ser.reset_output_buffer()
 
     while True:
-        ser.write('AT+SBDWRT=Hello World'.encode())
+        ser.write('AT+SBDWRT=Hello World\r'.encode())
         sleep(.1)
         ser.write('AT+SBDIX\r'.encode())
         sleep(.1)

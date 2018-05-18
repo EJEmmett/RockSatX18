@@ -1,0 +1,9 @@
+tar xvfz MinimalModbus-0.7.tar
+cd MinimalModbus-0.7
+python3 setup.py build
+python3 setup.py install --user
+
+tar xvfz pyserial-3.4.tar.gz
+cd pyserial-3.4
+python3 setup.py build
+python3 setup.py install --user

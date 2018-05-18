@@ -1,0 +1,5 @@
+#!/bin/sh -e
+
+python3 /home/pi/masterCameraCode.py & python3 /home/pi/music.py &
+
+exit 0

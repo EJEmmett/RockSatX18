@@ -5,12 +5,12 @@
 # This script is executed at the end of each multiuser runlevel.
 # Make sure that the script will "exit 0" on success or any other
 # value on error.
-#This is for the primary
+#This is for the secondary
 # In order to enable or disable this script just change the execution
 # bits.
 #
 # By default this script does nothing.
 
-sudo python3 /home/pi/IridiumMain.py ; /home/pi/functions.py ; /home/pi/main.py &
- 
+python3 /home/pi/main.py &
+
 exit 0

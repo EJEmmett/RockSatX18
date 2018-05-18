@@ -4,8 +4,13 @@ from multiprocessing import Process, Queue
 
 def main():
     #Class instancing
-    iridium = Iridium()
-    lasers = Laser()
+    try:
+        iridium = Iridium("/dev/ttyUSB0")
+        lasers = Laser("/dev/ttyUSB1")
+    except Exception:
+        iridium = Iridium("/dev/ttyUSB1")
+        lasers = Laser("/dev/ttyUSB0")
+
     laserQueue = Queue()
 
     #Process initialization
