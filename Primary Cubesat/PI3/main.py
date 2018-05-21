@@ -1,15 +1,19 @@
-from functions import Iridium, Laser
+from iridium import Iridium
+from laser import Laser
 from time import sleep
 from multiprocessing import Process, Queue
 
-def main():
+def main:
     #Class instancing
     try:
         iridium = Iridium("/dev/ttyUSB0")
-        lasers = Laser("/dev/ttyUSB1")
     except Exception:
         iridium = Iridium("/dev/ttyUSB1")
+        pass
+    try:
         lasers = Laser("/dev/ttyUSB0")
+    except Exception as e:
+        lasers = Laser("/dev/ttyUSB1")
 
     laserQueue = Queue()
 

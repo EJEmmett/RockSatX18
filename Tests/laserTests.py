@@ -24,7 +24,7 @@ def averages(rep1, con1):
     print(average1)
     print(average2)
 
-rep1 = timeit.repeat(rep, repeat=100)
-con1 = timeit.repeat(con, repeat=100)
+#rep1 = timeit.repeat(rep, repeat=100)
+#con1 = timeit.repeat(con, repeat=100)
 
-averages(rep1, con1)
+#averages(rep1, con1)
