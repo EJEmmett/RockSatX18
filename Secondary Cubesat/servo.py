@@ -3,7 +3,7 @@ import RPi.GPIO as GPIO
 
 def main():
     i=0
-    sleep(79)
+    #sleep(79)
 
     # Set mode to physical pin slot
     GPIO.setmode(GPIO.BOARD)
