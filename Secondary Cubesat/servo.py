@@ -27,6 +27,7 @@ def main():
         sleep(1)
         p.ChangeDutyCycle(2.5)
         i += 1
+        print(i)
     p.stop()
     GPIO.cleanup()
 
