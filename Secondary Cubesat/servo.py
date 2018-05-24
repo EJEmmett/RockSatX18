@@ -8,11 +8,11 @@ def main():
     # Set mode to physical pin slot
     GPIO.setmode(GPIO.BOARD)
     # Assign Pin 7 as output
-    GPIO.setup(7, GPIO.OUT)
+    GPIO.setup(12, GPIO.OUT)
 
     #50 indicates HZ signal
     #Period of signal is 20 milliseconds
-    p = GPIO.PWM(7, 50)
+    p = GPIO.PWM(12, 50)
     #DutyCycle = PulseWidth/(1/frequency) = PulseWidth * frequency
     p.start(5)
 
