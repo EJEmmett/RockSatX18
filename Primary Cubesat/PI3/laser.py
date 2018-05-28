@@ -15,6 +15,6 @@ class Laser:
             instance = ('Laser passed at: ' + datetime.now().strftime('%H:%M:%S'))
 
         if instance is not None:
-            with open("Laser.txt", "a") as f:
+            with open("masterLog.txt", "a") as f:
                 f.write(instance+"\n")
             q.put(instance)
