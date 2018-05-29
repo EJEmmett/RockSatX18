@@ -1,6 +1,5 @@
-import time
 from pygame import mixer
-from time import sleep as s
+from time import sleep, strftime
 
 log = ["The music started playing at: ", "The music stopped playing at: "]
 o = open("masterLog.txt", "a+")
@@ -16,19 +15,19 @@ mixer.init()
 o.write(log[1] + time.strftime('%H:%M:%S') + '\n')
 mixer.music.load(file1)
 mixer.music.play()
-s(180)
+sleep(180)
 
 mixer.music.load(file2)
 mixer.music.play()
-s(180)
+sleep(180)
 
 mixer.music.load(file3)#the ONE rap song...
 mixer.music.play()
-s(180)
+sleep(180)
 
 mixer.music.load(file4)
 mixer.music.play()
-s(180)
+sleep(180)
 
 mixer.music.load(file5)
 mixer.music.play()
