@@ -1,6 +1,6 @@
-import time
 import picamera
-from time import sleep
+from time import sleep, strftime
+
 camera = picamera.PiCamera()
 outputVersion = 1
 index = 0
