@@ -1,10 +1,12 @@
 from iridium import Iridium
 from laser import Laser
-from time import sleep
+from time import sleep, stftime
 from multiprocessing import Process, Queue
 
 def main:
     #Class instancing
+    log = ["The iridium started sending at: ", "The iridium stopped sending at: ")
+    o = open("masterLog.txt", "a+")
     try:
         iridium = Iridium("/dev/ttyUSB0")
     except Exception:
@@ -30,5 +32,6 @@ def main:
 
     while True:
         iridium.sendMessage(laserQueue.get())
+        o.write(log[1] + strftime('%H:%M:%S') + '\n')
 
 main()
