@@ -1,11 +1,11 @@
 from time import sleep
 import serial
 
-log = ["The iridium started sending at: ", "The iridium stopped sending at: ")
-o = open("masterLog.txt", "a+")
-      
+
 class Iridium:
-    o.write(log[0] + time.strftime('%H:%M:%S') + '\n')
+      log = ["The iridium started sending at: ", "The iridium stopped sending at: ")
+      o = open("masterLog.txt", "a+")
+       
     def __init__(self, port):
         self.ser = serial.Serial(port=port, baudrate=19200, xonxoff=True)
         self.ser.reset_input_buffer()
@@ -34,5 +34,5 @@ class Iridium:
                     if returned[1] != '0':
                         self.sendMessage(m)
 
-o.write(log[1] + time.strftime('%H:%M:%S') + '\n')
+
 o.close()
