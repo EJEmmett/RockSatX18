@@ -13,7 +13,7 @@ o = open("masterLog.txt", "a+")
 sleep(2)
 while(index < max):
     camera.capture("pic" + outputVersion + ".jpg")
-    o.write(log[1] + time.strftime('%H:%M:%S') + '\n')
+    o.write(log[1] + strftime('%H:%M:%S') + '\n')
     index += 1
     outputVersion += 1
     sleep(7)
