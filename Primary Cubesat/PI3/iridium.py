@@ -3,8 +3,7 @@ import serial
 
 
 class Iridium:
-      log = ["The iridium started sending at: ", "The iridium stopped sending at: ")
-      o = open("masterLog.txt", "a+")
+
        
     def __init__(self, port):
         self.ser = serial.Serial(port=port, baudrate=19200, xonxoff=True)
