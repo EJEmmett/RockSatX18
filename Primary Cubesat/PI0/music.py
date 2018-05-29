@@ -1,3 +1,4 @@
+import time
 from pygame import mixer
 from time import sleep as s
 
