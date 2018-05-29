@@ -1,5 +1,6 @@
-from time import sleep
+import time
 import RPi.GPIO as GPIO
+from time import sleep
 
 log = [""The servo moved at: "]
 o = open("test.txt", "a+")
