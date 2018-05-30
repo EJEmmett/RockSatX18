@@ -1,30 +1,14 @@
-import timeit
+import minimalmodbus as mini
 from datetime import datetime
 
-def rep():
-    #String replacement - 0.2546598883185716 seconds
-    i = ('Laser 1 passed at: {}'.format("12:24:11"))
+mini.BAUDRATE=115200
+primaryInstrument = mini.Instrument(port, 1, mode='rtu')
+primaryInstrument.write_register(4, value=75, functioncode=6)
 
-def con():
-    #String concatnation
-    i = ('Laser 1 passed at: ' + "12:24:11")
-
-def averages(rep1, con1):
-    a=0
-    b=0
-
-    for num in rep1:
-        a += num
-
-    for num in con1:
-        b += num
-
-    average1 = (a/100)
-    average2 = (b/100)
-    print(average1)
-    print(average2)
-
-#rep1 = timeit.repeat(rep, repeat=100)
-#con1 = timeit.repeat(con, repeat=100)
-
-#averages(rep1, con1)
+while 1:
+    primaryPass = primaryInstrument.read_register(24, functioncode = 4)
+    instance = None
+    if primaryPass is not 0:
+        instance = ('Laser passed at: ' + datetime.now().strftime('%H:%M:%S'))
+    if instance is not None:
+        print(instance)
