@@ -2,7 +2,7 @@ import RPi.GPIO as GPIO
 from time import sleep, strftime
 
 log = ["The servo moved at: "]
-o = open("test.txt", "a+")
+o = open("masterLog.txt", "a+")
 
 def main():
     i = 0
