@@ -23,15 +23,15 @@ def main():
     while (i < 10):
         # Change to open
         p.ChangeDutyCycle(7.5)
-        o.write(log[0] + time.strftime('%H:%M:%S') + '\n')
+        o.write(log[0] + strftime('%H:%M:%S') + '\n')
         #wait for open
         sleep(1)#this is the time that I thought we decided on?
         # Return to closed
         p.ChangeDutyCycle(10)
-        o.write(log[0] + time.strftime('%H:%M:%S') + '\n')
+        o.write(log[0] + strftime('%H:%M:%S') + '\n')
         sleep(1)
         p.ChangeDutyCycle(2.5)
-        o.write(log[0] + time.strftime('%H:%M:%S') + '\n')
+        o.write(log[0] + strftime('%H:%M:%S') + '\n')
         i += 1
         print(i)
     p.stop()
