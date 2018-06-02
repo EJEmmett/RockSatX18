@@ -4,7 +4,7 @@ from time import sleep, strftime
 camera = picamera.PiCamera()
 outputVersion = 1
 index = 0
-max = 35
+max = 135
 camera.exposure_mode = 'antishake'
 
 log = ["The camera took a picture at: "]
