@@ -1,5 +1,5 @@
 import RPi.GPIO as GPIO
-from time import sleep, strftime
+from time import sleep
 from multiprocessing import Process, Array
 
 class Clock:
@@ -8,13 +8,14 @@ class Clock:
         self.minute = 0
 
     def increment(self, t):
-        self.second+=1
-        if self.second == 60:
-            self.minute+=1
-            self.second = 0
-        t[0] = self.minute
-        t[1] = self.second
-        sleep(1)
+        while 1:
+            self.second+=1
+            if self.second == 60:
+                self.minute+=1
+                self.second = 0
+            t[0] = self.minute
+            t[1] = self.second
+            sleep(1)
 
 def main():
     #Internal Clock initialization
@@ -22,8 +23,6 @@ def main():
     time = Array("i", 2)
     timings = Process(target=clock.increment, args=(time,))
     timings.start()
-
-    #Servo movement
 
     o = open("masterLog.txt", "a+")
     i = 0
@@ -57,7 +56,7 @@ def movement(p, o):
         p.ChangeDutyCycle(7.5)
         o.write("The servo moved at: " + str(time[0]).zfill(2)+":"+str(time[1]).zfill(2) + '\n')
         #wait for open
-        sleep(1)#this is the time that I thought we decided on?
+        sleep(1)
         # Return to closed
         p.ChangeDutyCycle(10)
         o.write("The servo moved at: " + str(time[0]).zfill(2)+":"+str(time[1]).zfill(2) + '\n')

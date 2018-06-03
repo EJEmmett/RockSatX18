@@ -1,6 +1,5 @@
 from time import sleep
 import serial
-from datetime import datetime
 import minimalmodbus as mini
 
 class Clock:
@@ -9,19 +8,19 @@ class Clock:
         self.minute = 0
 
     def increment(self, t):
-        self.second+=1
-        if self.second == 60:
-            self.minute+=1
-            self.second = 0
-        t[0] = self.minute
-        t[1] = self.second
-        sleep(1)
-
+        while 1:
+            self.second+=1
+            if self.second == 60:
+                self.minute+=1
+                self.second = 0
+            t[0] = self.minute
+            t[1] = self.second
+            sleep(1)
 
 class Laser:
     def __init__(self, port):
         mini.BAUDRATE=115200
-        self.primaryInstrument = mini.Instrument(port, 1, mode='rtu')
+        self.primaryInstrument = mini.Instrument("/dev/ttyUSB1", 1, mode='rtu')
         self.primaryInstrument.write_register(4, value=20, functioncode=6)
 
     def measure(self, conn, t):
@@ -38,7 +37,7 @@ class Laser:
 
 class Iridium:
     def __init__(self, port):
-        self.ser = serial.Serial(port=port, baudrate=19200, xonxoff=True)
+        self.ser = serial.Serial(port="/dev/ttyUSB0", baudrate=19200, xonxoff=True)
         self.ser.reset_input_buffer()
         self.ser.reset_output_buffer()
 
@@ -50,10 +49,12 @@ class Iridium:
             self.ser.flush()
 
     def sendMessage(self, m):
+        returned = None
         self.ser.write(('AT+SBDWRT= ' + m + '\r').encode())
         sleep(.1)
         self.ser.reset_input_buffer()
         self.ser.write('AT+SBDIX\r'.encode())
+        sleep(.1)
         strip = str.maketrans( '', '', '\r\n,')
         returned = self.ser.read(size=self.ser.in_waiting).decode().translate(strip).split(" ")
         self.ser.reset_input_buffer()

@@ -1,5 +1,5 @@
 from functions import Laser, Iridium, Clock
-from time import sleep, stftime
+from time import sleep
 from multiprocessing import Process, Pipe, Array
 
 def main:
@@ -7,8 +7,8 @@ def main:
     o = open("masterLog.txt", "a+")
 
     clock = Clock()
-    iridium = Iridium("/dev/ttyUSB0")
-    laser = Laser("/dev/ttyUSB1")
+    iridium = Iridium()
+    laser = Laser()
 
     #Laser pipe initialization
     parent, child = Pipe()
@@ -20,7 +20,6 @@ def main:
     laserList = Process(target=lasers.measure, args=(child, time,))
     broadcast = Process(target=iridium.broadcast)
     timings = Process(target=clock.increment, args=(time,))
-
     timings.start()
     laserList.start()
     broadcast.start()
@@ -34,5 +33,6 @@ def main:
         o.write("The iridium started sending at: " + str(time[0]).zfill(2)+":"+str(time[1]).zfill(2) + '\n')
         iridium.sendMessage(parent.recv())
         o.write("The iridium stopped sending at: " + str(time[0]).zfill(2)+":"+str(time[1]).zfill(2) + '\n')
-
-main()
+        
+if __name__ == '__main__':
+    main()
