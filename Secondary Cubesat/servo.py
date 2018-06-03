@@ -1,12 +1,32 @@
 import RPi.GPIO as GPIO
 from time import sleep, strftime
+from multiprocessing import Process, Array
 
-log = ["The servo moved at: "]
-o = open("masterLog.txt", "a+")
+class Clock:
+    def __init__(self):
+        self.second = 0
+        self.minute = 0
+
+    def increment(self, t):
+        self.second+=1
+        if self.second == 60:
+            self.minute+=1
+            self.second = 0
+        t[0] = self.minute
+        t[1] = self.second
+        sleep(1)
 
 def main():
+    #Internal Clock initialization
+    clock = Clock()
+    time = Array("i", 2)
+    timings = Process(target=clock.increment, args=(time,))
+    timings.start()
+
+    #Servo movement
+
+    o = open("masterLog.txt", "a+")
     i = 0
-    #sleep(79)
 
     # Set mode to physical pin slot
     GPIO.setwarnings(False)
@@ -18,23 +38,32 @@ def main():
     #Period of signal is 20 milliseconds
     p=GPIO.PWM(18, 50)
     #DutyCycle = PulseWidth/(1/frequency) = PulseWidth * frequency
-    p.start(7.5)
 
-    while (i < 10):
+    sleep(147)
+
+    move = Process(target=movement, args=(p, o,))
+    move.start()
+    sleep(753)
+    move.join()
+    timings.join()
+    p.stop()
+    GPIO.cleanup()
+    o.close()
+
+def movement(p, o):
+    p.start(7.5)
+    while 1:
         # Change to open
         p.ChangeDutyCycle(7.5)
-        o.write(log[0] + strftime('%H:%M:%S') + '\n')
+        o.write("The servo moved at: " + str(time[0]).zfill(2)+":"+str(time[1]).zfill(2) + '\n')
         #wait for open
         sleep(1)#this is the time that I thought we decided on?
         # Return to closed
         p.ChangeDutyCycle(10)
-        o.write(log[0] + strftime('%H:%M:%S') + '\n')
+        o.write("The servo moved at: " + str(time[0]).zfill(2)+":"+str(time[1]).zfill(2) + '\n')
         sleep(1)
         p.ChangeDutyCycle(2.5)
-        o.write(log[0] + strftime('%H:%M:%S') + '\n')
+        o.write("The servo moved at: " + str(time[0]).zfill(2)+":"+str(time[1]).zfill(2) + '\n')
         i += 1
-        print(i)
-    p.stop()
-    GPIO.cleanup()
-    o.close()
+
 main()

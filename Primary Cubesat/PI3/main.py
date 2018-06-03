@@ -1,27 +1,27 @@
-from iridium import Iridium
-from laser import Laser
+from functions import Laser, Iridium, Clock
 from time import sleep, stftime
-from multiprocessing import Process, Queue
+from multiprocessing import Process, Pipe, Array
 
 def main:
     #Class instancing
-    log = ["The iridium started sending at: ", "The iridium stopped sending at: ")
     o = open("masterLog.txt", "a+")
-    try:
-        iridium = Iridium("/dev/ttyUSB0")
-    except Exception:
-        iridium = Iridium("/dev/ttyUSB1")
-        pass
-    try:
-        lasers = Laser("/dev/ttyUSB0")
-    except Exception as e:
-        lasers = Laser("/dev/ttyUSB1")
 
-    laserQueue = Queue()
+    clock = Clock()
+    iridium = Iridium("/dev/ttyUSB0")
+    laser = Laser("/dev/ttyUSB1")
+
+    #Laser pipe initialization
+    parent, child = Pipe()
+
+    #Time initialization
+    time = Array("i", 2)
 
     #Process initialization
-    laserList = Process(target=lasers.measure, args=(laserQueue,))
+    laserList = Process(target=lasers.measure, args=(child, time,))
     broadcast = Process(target=iridium.broadcast)
+    timings = Process(target=clock.increment, args=(time,))
+
+    timings.start()
     laserList.start()
     broadcast.start()
 
@@ -31,7 +31,8 @@ def main:
     broadcast.join()
 
     while True:
-        iridium.sendMessage(laserQueue.get())
-        o.write(log[1] + strftime('%H:%M:%S') + '\n')
+        o.write("The iridium started sending at: " + str(time[0]).zfill(2)+":"+str(time[1]).zfill(2) + '\n')
+        iridium.sendMessage(parent.recv())
+        o.write("The iridium stopped sending at: " + str(time[0]).zfill(2)+":"+str(time[1]).zfill(2) + '\n')
 
 main()
