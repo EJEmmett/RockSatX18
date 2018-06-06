@@ -4,7 +4,7 @@ from multiprocessing import Process, Pipe, Array
 
 def main:
     #Class instancing
-    o = open("masterLog.txt", "a+")
+    o = open("/home/pi/masterLog.txt", "a+")
 
     clock = Clock()
     iridium = Iridium()
