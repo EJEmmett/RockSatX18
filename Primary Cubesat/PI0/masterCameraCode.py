@@ -34,7 +34,7 @@ def main():
 
     sleep(79)
     while(index < max):
-        camera.capture("pic" + outputVersion + ".png")
+        camera.capture("/home/pi/Pictures/pic" + outputVersion + ".png")
         o.write("The camera took a picture at: " + str(time[0]).zfill(2)+":"+str(time[1]).zfill(2) + '\n')
         index += 1
         outputVersion += 1
