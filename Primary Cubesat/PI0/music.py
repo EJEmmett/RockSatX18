@@ -15,8 +15,8 @@ def main():
     file1 = '/home/pi/Music/danger_zone.mp3'
     file2 = '/home/pi/Music/Starman.mp3'
     file3 = '/home/pi/Music/cakes.mp3'
-    file4 = '/home/pi/Music/staying_alive.mp3'
-    file5 = '/home/pi/Music/space_oddity.mp3'
+    file4 = '/home/pi/Music/space_oddity.mp3'
+    file5 = '/home/pi/Music/staying_alive.mp3'
 
     mixer.init()
     o.write("The music started playing at: " + str(time[0]).zfill(2)+":"+str(time[1]).zfill(2) + '\n')
