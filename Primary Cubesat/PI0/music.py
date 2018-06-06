@@ -10,7 +10,7 @@ def main():
     timings = Process(target=clock.increment, args=(time,))
     timings.start()
 
-    o = open("masterLog.txt", "a+")
+    o = open("/home/pi/masterLog.txt", "a+")
 
     file1 = '/home/pi/Music/danger_zone.mp3'
     file2 = '/home/pi/Music/Starman.mp3'

@@ -4,7 +4,7 @@ from datetime import datetime
 mini.BAUDRATE=115200
 primaryInstrument = mini.Instrument(port, 1, mode='rtu')
 primaryInstrument.write_register(4, value=20, functioncode=6)
-o = open("masterLog.txt", "a+")
+o = open("/home/pi/masterLog.txt", "a+")
 
 while 1:
     primaryPass = primaryInstrument.read_register(24, functioncode = 4)
