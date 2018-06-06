@@ -30,7 +30,7 @@ def main():
     max = 135
     camera.exposure_mode = 'antishake'
 
-    o = open("masterLog.txt", "a+")
+    o = open("/home/pi/masterLog.txt", "a+")
 
     sleep(79)
     while(index < max):
