@@ -24,7 +24,7 @@ def main():
     timings = Process(target=clock.increment, args=(time,))
     timings.start()
 
-    o = open("masterLog.txt", "a+")
+    o = open("/home/pi/masterLog.txt", "a+")
     i = 0
 
     # Set mode to physical pin slot
