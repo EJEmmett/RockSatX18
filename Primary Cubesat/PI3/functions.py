@@ -24,16 +24,17 @@ class Laser:
         self.primaryInstrument.write_register(4, value=20, functioncode=6)
 
     def measure(self, conn, t):
-        primaryPass = self.primaryInstrument.read_register(24, functioncode = 4)
-        instance = None
+        while 1:
+            primaryPass = self.primaryInstrument.read_register(24, functioncode = 4)
+            instance = None
 
-        if primaryPass is not 0:
-            instance = ("Laser passed at " + str(t[0]).zfill(2)+":"+str(t[1]).zfill(2) + " at a distance of " + primaryPass + ".") #Should be less than 100 bytes
+            if primaryPass is not 0:
+                instance = ("Laser passed at " + str(t[0]).zfill(2)+":"+str(t[1]).zfill(2) + " at a distance of " + str(primaryPass).zfill(3) + ".") #43 bytes
 
-        if instance is not None:
-            with open("masterLog.txt", "a+") as f:
-                f.write(instance+"\n")
-            conn.send(instance)
+            if instance is not None:
+                with open("masterLog.txt", "a+") as f:
+                    f.write(instance+"\n")
+                conn.send(instance)
 
 class Iridium:
     def __init__(self, port):
@@ -42,8 +43,9 @@ class Iridium:
         self.ser.reset_output_buffer()
 
     def broadcast(self):
+        byteMessage =
         while True:
-            self.ser.write('AT+SBDWRT=I\'m alive\r'.encode())
+            self.ser.write(b'\x41\x54\x2b\x53\x42\x44\x57\x52\x54\x3d\x49\x27\x6d\x20\x61\x6c\x69\x76\x65\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x0d') #31 Bytes
             sleep(.1)
             self.ser.write('AT+SBDIX\r'.encode())
             self.ser.flush()

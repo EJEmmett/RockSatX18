@@ -2,7 +2,7 @@ from functions import Laser, Iridium, Clock
 from time import sleep
 from multiprocessing import Process, Pipe, Array
 
-def main:
+def main():
     #Class instancing
     o = open("/home/pi/masterLog.txt", "a+")
 
@@ -33,6 +33,6 @@ def main:
         o.write("The iridium started sending at: " + str(time[0]).zfill(2)+":"+str(time[1]).zfill(2) + '\n')
         iridium.sendMessage(parent.recv())
         o.write("The iridium stopped sending at: " + str(time[0]).zfill(2)+":"+str(time[1]).zfill(2) + '\n')
-        
+
 if __name__ == '__main__':
     main()
