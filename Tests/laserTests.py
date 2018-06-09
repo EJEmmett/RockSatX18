@@ -1,6 +1,23 @@
 import minimalmodbus as mini
-from time import sleep
+from pygame import mixer
+from picamera import PiCamera
 import serial
+from time import sleep
+
+class Clock:
+    def __init__(self):
+        self.second = 0
+        self.minute = 0
+
+    def increment(self, t):
+        while 1:
+            self.second+=1
+            if self.second == 60:
+                self.minute+=1
+                self.second = 0
+            t[0] = self.minute
+            t[1] = self.second
+            sleep(1)
 
 class Laser:
     def __init__(self):
@@ -12,14 +29,15 @@ class Laser:
         self.primaryInstrument.write_register(4, value=20, functioncode=6)
 
     def measure(self, conn):
-        primaryPass = self.primaryInstrument.read_register(24, functioncode = 4)
-        instance = None
+        while 1:
+            primaryPass = self.primaryInstrument.read_register(24, functioncode = 4)
+            instance = None
 
-        if primaryPass is not 0:
-            instance = ("Laser passed at " + str(primaryPass))
+            if primaryPass is not 0:
+                instance = ("Laser passed at " + str(primaryPass))
 
-        if instance is not None:
-            conn.send(instance)
+            if instance is not None:
+                conn.send(instance)
 
 class Iridium:
     def __init__(self):
@@ -30,6 +48,15 @@ class Iridium:
         self.ser.reset_input_buffer()
         self.ser.reset_output_buffer()
 
+    def broadcast(self):
+        while True:
+            self.ser.write(b'\x41\x54\x2b\x53\x42\x44\x57\x52\x54\x3d\x49\x27\x6d\x20\x61\x6c\x69\x76\x65\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x0d') #31 Bytes
+            sleep(.1)
+            self.ser.write('AT+SBDIX\r'.encode())
+            sleep(.1)
+            self.ser.reset_input_buffer()
+            self.ser.reset_output_buffer()
+
     def sendMessage(self, m):
         returned = None
         self.ser.write(('AT+SBDWRT= ' + m + '\r').encode())
@@ -37,6 +64,54 @@ class Iridium:
         self.ser.reset_input_buffer()
         self.ser.write('AT+SBDIX\r'.encode())
         sleep(.1)
-        print(self.ser.read(size=self.ser.in_waiting).decode())
         self.ser.reset_input_buffer()
         self.ser.reset_output_buffer()
+
+class Camera:
+    def __init__(self):
+        self.camera = picamera.PiCamera()
+        self.camera.exposure_mode = 'antishake'
+
+    def capture(self):
+        sleep(79)
+        outputVersion = 1
+        index = 0
+        max = 135
+        while(index < max):
+            self.camera.capture("/home/pi/Pictures/pic" + outputVersion + ".png")
+            index += 1
+            outputVersion += 1
+            sleep(15)
+
+class Music:
+    def __init__(self):
+        self.file1 = '/home/pi/Music/danger_zone.mp3'
+        self.file2 = '/home/pi/Music/Starman.mp3'
+        self.file3 = '/home/pi/Music/cakes.mp3'
+        self.file4 = '/home/pi/Music/space_oddity.mp3'
+        self.file5 = '/home/pi/Music/staying_alive.mp3'
+
+    def begin(self):
+        mixer.init()
+        sleep(0.1)
+        mixer.music.load(self.file1)
+        mixer.music.play()
+        sleep(180)
+
+        mixer.music.load(self.file2)
+        mixer.music.play()
+        sleep(180)
+
+        mixer.music.load(self.file3)#the ONE rap song...
+        mixer.music.play()
+        sleep(180)
+
+        mixer.music.load(self.file4)
+        mixer.music.play()
+        sleep(180)
+
+        mixer.music.load(self.file5)
+        mixer.music.play()
+        sleep(180)
+
+        mixer.stop()
