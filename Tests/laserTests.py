@@ -1,6 +1,6 @@
 import minimalmodbus as mini
 from pygame import mixer
-from picamera import PiCamera
+import picamera
 import serial
 from time import sleep
 
