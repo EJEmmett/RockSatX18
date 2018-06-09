@@ -38,7 +38,7 @@ def main():
         o.write("The camera took a picture at: " + str(time[0]).zfill(2)+":"+str(time[1]).zfill(2) + '\n')
         index += 1
         outputVersion += 1
-        sleep(7)
+        sleep(15)
 
     o.close()
     timings.join()
