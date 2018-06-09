@@ -28,7 +28,8 @@ class Laser:
             self.primaryInstrument = mini.Instrument("/dev/ttyUSB1", 1, mode='rtu')
         self.primaryInstrument.write_register(4, value=20, functioncode=6)
 
-    def measure(self, conn):
+    def measure(self):
+        print("Laser start")
         while 1:
             primaryPass = self.primaryInstrument.read_register(24, functioncode = 4)
             instance = None
@@ -37,7 +38,8 @@ class Laser:
                 instance = ("Laser passed at " + str(primaryPass))
 
             if instance is not None:
-                conn.send(instance)
+                print(instance)
+                sleep(5)
 
 class Iridium:
     def __init__(self):
@@ -49,6 +51,7 @@ class Iridium:
         self.ser.reset_output_buffer()
 
     def broadcast(self):
+        print("Broadcast Start")
         while True:
             self.ser.write(b'\x41\x54\x2b\x53\x42\x44\x57\x52\x54\x3d\x49\x27\x6d\x20\x61\x6c\x69\x76\x65\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x0d') #31 Bytes
             sleep(.1)
@@ -56,6 +59,7 @@ class Iridium:
             sleep(.1)
             self.ser.reset_input_buffer()
             self.ser.reset_output_buffer()
+            print("Broadcast still going")
 
     def sendMessage(self, m):
         returned = None
@@ -73,15 +77,20 @@ class Camera:
         self.camera.exposure_mode = 'antishake'
 
     def capture(self):
+        print("Camera Starting")
         sleep(79)
         outputVersion = 1
         index = 0
         max = 135
-        while(index < max):
-            self.camera.capture("/home/pi/Pictures/pic" + outputVersion + ".png")
-            index += 1
-            outputVersion += 1
-            sleep(15)
+        try:
+            while(index < max):
+                print(outputVersion)
+                self.camera.capture("/home/pi/Pictures/pic" + str(outputVersion) + ".png")
+                index += 1
+                outputVersion += 1
+                sleep(15)
+        except:
+            print("Camera fucked up")
 
 class Music:
     def __init__(self):
@@ -92,6 +101,7 @@ class Music:
         self.file5 = '/home/pi/Music/staying_alive.mp3'
 
     def begin(self):
+        print("Music Start")
         mixer.init()
         sleep(0.1)
         mixer.music.load(self.file1)
@@ -115,3 +125,4 @@ class Music:
         sleep(180)
 
         mixer.stop()
+        print("Music Stop")
