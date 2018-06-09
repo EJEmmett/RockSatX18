@@ -57,13 +57,5 @@ class Iridium:
         self.ser.reset_input_buffer()
         self.ser.write('AT+SBDIX\r'.encode())
         sleep(.1)
-        strip = str.maketrans( '', '', '\r\n,')
-        returned = self.ser.read(size=self.ser.in_waiting).decode().translate(strip).split(" ")
         self.ser.reset_input_buffer()
         self.ser.reset_output_buffer()
-
-        if returned is not None:
-            if len(returned) > 1:
-                if returned[0] == '+SBDIX:':
-                    if returned[1] != '0':
-                        self.sendMessage(m)
