@@ -14,7 +14,7 @@ def main():
     broadcast = Process(target=iridium.broadcast)
     laserList = Process(target=laser.measure)
     timings = Process(target=clock.increment, args=(time,))
-    snapshots = Process(target=camera.picture)
+    snapshots = Process(target=camera.capture)
     muzzak = Process(target=music.begin)
     print("Process Instancing")
 
