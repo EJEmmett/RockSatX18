@@ -29,17 +29,15 @@ class Laser:
         self.primaryInstrument.write_register(4, value=20, functioncode=6)
 
     def measure(self):
-        print("Laser start")
         while 1:
             primaryPass = self.primaryInstrument.read_register(24, functioncode = 4)
             instance = None
 
             if primaryPass is not 0:
-                instance = ("Laser passed at " + str(primaryPass))
+                instance = primaryPass
 
-            if instance is not None:
-                print(instance)
-                sleep(5)
+            if instance is None:
+                print("Laser passed at " + str(primaryPass))
 
 class Iridium:
     def __init__(self):
@@ -51,7 +49,6 @@ class Iridium:
         self.ser.reset_output_buffer()
 
     def broadcast(self):
-        print("Broadcast Start")
         while True:
             self.ser.write(b'\x41\x54\x2b\x53\x42\x44\x57\x52\x54\x3d\x49\x27\x6d\x20\x61\x6c\x69\x76\x65\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x0d') #31 Bytes
             sleep(.1)
@@ -59,7 +56,6 @@ class Iridium:
             sleep(.1)
             self.ser.reset_input_buffer()
             self.ser.reset_output_buffer()
-            print("Broadcast still going")
 
     def sendMessage(self, m):
         returned = None
@@ -72,7 +68,6 @@ class Iridium:
         self.ser.reset_output_buffer()
 
 def cap():
-    print("Camera Starting")
     camera = picamera.PiCamera()
     camera.exposure_mode = 'antishake'
 
@@ -97,7 +92,6 @@ class Music:
         self.file5 = '/home/pi/Music/staying_alive.mp3'
 
     def begin(self):
-        print("Music Start")
         mixer.init()
         sleep(0.1)
         mixer.music.load(self.file1)
@@ -121,4 +115,3 @@ class Music:
         sleep(180)
 
         mixer.stop()
-        print("Music Stop")
