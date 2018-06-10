@@ -73,7 +73,7 @@ class Iridium:
 
 def cap():
     print("Camera Starting")
-    camera = PiCamera()
+    camera = picamera.PiCamera()
     camera.exposure_mode = 'antishake'
 
     sleep(2)
