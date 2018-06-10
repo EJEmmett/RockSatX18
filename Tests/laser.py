@@ -1,11 +1,10 @@
-from laserTests import Iridium, Laser, Clock, Camera, Music
+from laserTests import Iridium, Laser, Clock, Music, cap
 from multiprocessing import Pipe, Process, Array
 from time import sleep
 
 def main():
     #time = Array("i", 2)
     #music = Music()
-    cam = Cam()
     #clock = Clock()
     #iridium = Iridium()
     #laser = Laser()
@@ -14,7 +13,7 @@ def main():
     #broadcast = Process(target=iridium.broadcast)
     #laserList = Process(target=laser.measure)
     #timings = Process(target=clock.increment, args=(time,))
-    snapshots = Process(target=cam.cap)
+    snapshots = Process(target=cap)
     #muzzak = Process(target=music.begin)
     #print("Process Instancing")
 

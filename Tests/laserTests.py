@@ -71,24 +71,22 @@ class Iridium:
         self.ser.reset_input_buffer()
         self.ser.reset_output_buffer()
 
-class Cam:
-    def __init__(self):
-        self.camera = PiCamera()
-        self.camera.exposure_mode = 'antishake'
+def cap():
+    print("Camera Starting")
+    camera = PiCamera()
+    camera.exposure_mode = 'antishake'
 
-    def cap(self):
-        print("Camera Starting")
-        #sleep(79)
-        outputVersion = 1
-        index = 0
-        max = 135
+    sleep(2)
+    outputVersion = 1
+    index = 0
+    max = 135
 
-        while(index < max):
-            print(outputVersion)
-            self.camera.capture("/home/pi/Pictures/pic" + str(outputVersion) + ".png")
-            index += 1
-            outputVersion += 1
-            sleep(5)
+    while(index < max):
+        print(outputVersion)
+        camera.capture("/home/pi/Pictures/pic" + str(outputVersion) + ".png")
+        index += 1
+        outputVersion += 1
+        sleep(5)
 
 class Music:
     def __init__(self):
