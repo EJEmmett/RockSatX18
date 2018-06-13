@@ -67,7 +67,7 @@ def movement(p, o):
         p.ChangeDutyCycle(2.5)
         o.write("The servo moved at: " + str(time[0]).zfill(2)+":"+str(time[1]).zfill(2) + '\n')
 		GPIO.output(4, GPIO.LOW)
-        o.write("The LED turned on at: " + str(time[0]).zfill(2)+":"+str(time[1]).zfill(2) + '\n')		
+        o.write("The LED turned off at: " + str(time[0]).zfill(2)+":"+str(time[1]).zfill(2) + '\n')		
 		i += 1
 
 main()
