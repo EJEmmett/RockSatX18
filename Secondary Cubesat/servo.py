@@ -32,6 +32,7 @@ def main():
     GPIO.setmode(GPIO.BCM)
     # Assign Pin 7 as output
     GPIO.setup(18, GPIO.OUT)
+	GPIO.setup(4, GPIO.OUT)
 
     #50 indicates HZ signal
     #Period of signal is 20 milliseconds
@@ -56,6 +57,8 @@ def movement(p, o):
         p.ChangeDutyCycle(7.5)
         o.write("The servo moved at: " + str(time[0]).zfill(2)+":"+str(time[1]).zfill(2) + '\n')
         #wait for open
+		GPIO.output(4, GPIO.HIGH)
+        o.write("The LED turned on at: " + str(time[0]).zfill(2)+":"+str(time[1]).zfill(2) + '\n')
         sleep(1)
         # Return to closed
         p.ChangeDutyCycle(10)
@@ -63,6 +66,8 @@ def movement(p, o):
         sleep(1)
         p.ChangeDutyCycle(2.5)
         o.write("The servo moved at: " + str(time[0]).zfill(2)+":"+str(time[1]).zfill(2) + '\n')
-        i += 1
+		GPIO.output(4, GPIO.LOW)
+        o.write("The LED turned on at: " + str(time[0]).zfill(2)+":"+str(time[1]).zfill(2) + '\n')		
+		i += 1
 
 main()
