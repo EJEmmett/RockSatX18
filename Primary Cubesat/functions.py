@@ -80,7 +80,7 @@ def capture_picture(stream_c):
 
     photo_stream = BytesIO()
     camera.capture(photo_stream, 'jpeg', resize=(38, 38))
-    stream_c.send(photo_stream.read())
+    stream_c.send_bytes(photo_stream.read())
 
     while index < maximum:
         camera.capture("/home/pi/Pictures/pic" + str(index + 1) + ".png")
