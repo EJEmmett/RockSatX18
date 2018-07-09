@@ -1,38 +1,38 @@
-from functions import Laser, Iridium, Clock
 from time import sleep
-from multiprocessing import Process, Pipe, Array
+from multiprocessing import Pipe, Process, Array
+from functions import Iridium, Laser, capture_picture, clock
 
 def main():
-    #Class instancing
-    o = open("/home/pi/masterLog.txt", "a+")
+    file = open("/home/pi/masterLog.txt", "a+")
 
-    clock = Clock()
+    t = Array("i", 2)
+    laser_p, laser_c = Pipe()
+    stream_p, stream_c = Pipe()
     iridium = Iridium()
     laser = Laser()
 
-    #Laser pipe initialization
-    parent, child = Pipe()
-
-    #Time initialization
-    time = Array("i", 2)
-
-    #Process initialization
-    laserList = Process(target=lasers.measure, args=(child, time,))
+    timekeeper = Process(target=clock, args=(t,))
     broadcast = Process(target=iridium.broadcast)
-    timings = Process(target=clock.increment, args=(time,))
-    timings.start()
-    laserList.start()
+    transmission = Process(target=iridium.image_transmission, args=(stream_p,))
+    imaging = Process(target=capture_picture, args=(stream_c,))
+    laser_list = Process(target=laser.measure, args=(laser_c, t,))
+
+    timekeeper.start()
     broadcast.start()
+    sleep(70)
+    imaging.start()
+    sleep(37)
+    laser_list.start()
+    sleep(28)
+    broadcast.terminate()
+    transmission.start()
+    sleep(65)
 
-    sleep(200)
 
-    #Process close
-    broadcast.join()
-
-    while True:
-        o.write("The iridium started sending at: " + str(time[0]).zfill(2)+":"+str(time[1]).zfill(2) + '\n')
-        iridium.sendMessage(parent.recv())
-        o.write("The iridium stopped sending at: " + str(time[0]).zfill(2)+":"+str(time[1]).zfill(2) + '\n')
+    while 1:
+        file.write("The iridium started sending at: " + str(t[0]).zfill(2)+":"+str(t[1]).zfill(2) + '\n')
+        iridium.send_message(laser_p.recv())
+        file.write("The iridium stopped sending at: " + str(t[0]).zfill(2)+":"+str(t[1]).zfill(2) + '\n')
 
 if __name__ == '__main__':
     main()

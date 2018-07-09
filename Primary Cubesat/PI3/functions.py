@@ -1,60 +1,88 @@
 from time import sleep
+from io import BytesIO
 import serial
 import minimalmodbus as mini
+import picamera
 
-class Clock:
-    def __init__(self):
-        self.second = 0
-        self.minute = 0
-
-    def increment(self, t):
-        while 1:
-            self.second+=1
-            if self.second == 60:
-                self.minute+=1
-                self.second = 0
-            t[0] = self.minute
-            t[1] = self.second
-            sleep(1)
+def clock(t):
+    second = 0
+    minute = 0
+    while 1:
+        second += 1
+        if second == 60:
+            minute += 1
+            second = 0
+        t[0] = minute
+        t[1] = second
+        sleep(1)
 
 class Laser:
-    def __init__(self, port):
-        mini.BAUDRATE=115200
-        self.primaryInstrument = mini.Instrument("/dev/ttyUSB1", 1, mode='rtu')
-        self.primaryInstrument.write_register(4, value=20, functioncode=6)
+    def __init__(self):
+        mini.BAUDRATE = 115200
+        try:
+            self.primary_instrument = mini.Instrument("/dev/ttyUSB0", 1, mode='rtu')
+        except:
+            self.primary_instrument = mini.Instrument("/dev/ttyUSB1", 1, mode='rtu')
+        self.primary_instrument.write_register(4, value=20, functioncode=6)
 
-    def measure(self, conn, t):
+    def measure(self, laser_c, t):
         while 1:
-            primaryPass = self.primaryInstrument.read_register(24, functioncode = 4)
+            primary_pass = self.primary_instrument.read_register(24, functioncode=4)
             instance = None
 
-            if primaryPass is not 0:
-                instance = ("Laser passed at " + str(t[0]).zfill(2)+":"+str(t[1]).zfill(2) + " at a distance of " + str(primaryPass).zfill(3) + ".") #43 bytes
+            if primary_pass is not 0:
+                instance = primary_pass
 
-            if instance is not None:
-                with open("masterLog.txt", "a+") as f:
-                    f.write(instance+"\n")
-                conn.send(instance)
+            if instance is None:
+                laser_c.send("Laser passed at " + str(t[0]).zfill(2) + ":" + str(t[1]).zfill(2) + "          ")#31 Bytes
 
 class Iridium:
-    def __init__(self, port):
-        self.ser = serial.Serial(port="/dev/ttyUSB0", baudrate=19200, xonxoff=True)
+    def __init__(self):
+        try:
+            self.ser = serial.Serial(port="/dev/ttyUSB1", baudrate=19200, xonxoff=True)
+        except:
+            self.ser = serial.Serial(port="/dev/ttyUSB0", baudrate=19200, xonxoff=True)
         self.ser.reset_input_buffer()
         self.ser.reset_output_buffer()
+
+    def image_transmission(self, stream_p):
+        split_stream = list(stream_p.recv_bytes())
+        while True:
+            self.ser.write(("AT+SBDWT=" + bytes(split_stream[0:120]) + "\r").encode())
+            sleep(.1)
+            self.ser.write(b'AT+SBDIX\r')
+            sleep(.1)
+            self.ser.write(b'AT+SBDD0\r')
+            del split_stream[0:120]
 
     def broadcast(self):
         while True:
-            self.ser.write(b'\x41\x54\x2b\x53\x42\x44\x57\x52\x54\x3d\x49\x27\x6d\x20\x61\x6c\x69\x76\x65\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x0d') #31 Bytes
+            self.ser.write(b'AT+SBDWT=Hello World                    \r') #31 Bytes
             sleep(.1)
-            self.ser.write('AT+SBDIX\r'.encode())
-            self.ser.flush()
+            self.ser.write(b'AT+SBDIX\r')
+            sleep(.1)
+            self.ser.write(b'AT+SBDD0\r')
 
-    def sendMessage(self, m):
-        returned = None
-        self.ser.write(('AT+SBDWRT= ' + m + '\r').encode())
+    def send_message(self, message):
+        self.ser.write(('AT+SBDWRT=' + message + '\r').encode())
         sleep(.1)
-        self.ser.reset_input_buffer()
-        self.ser.write('AT+SBDIX\r'.encode())
+        self.ser.write(b'AT+SBDIX\r')
         sleep(.1)
-        self.ser.reset_input_buffer()
-        self.ser.reset_output_buffer()
+        self.ser.write(b'AT+SBDD0\r')
+
+def capture_picture(stream_c):
+    camera = picamera.PiCamera()
+    camera.exposure_mode = 'antishake'
+
+    sleep(2)
+    index = 0
+    maximum = 135
+
+    photo_stream = BytesIO()
+    camera.capture(photo_stream, 'jpeg', resize=(38, 38))
+    stream_c.send(photo_stream.read())
+
+    while index < maximum:
+        camera.capture("/home/pi/Pictures/pic" + str(index + 1) + ".png")
+        index += 1
+        sleep(5)
