@@ -19,13 +19,15 @@ def main():
 
     timekeeper.start()
     broadcast.start()
-    sleep(70)
+    sleep(20)
     imaging.start()
-    sleep(37)
-    laser_list.start()
-    sleep(28)
-    broadcast.terminate()
+    sleep(20)
     transmission.start()
+	sleep(103)
+	laser_list.start()
+    sleep(768)
+    broadcast.terminate()
+    
     sleep(65)
 
 
