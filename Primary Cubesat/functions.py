@@ -44,23 +44,10 @@ class Iridium:
             self.ser = serial.Serial(port="/dev/ttyUSB0", baudrate=19200, xonxoff=True)
         self.ser.reset_input_buffer()
         self.ser.reset_output_buffer()
-	
-	sleep(35)
-    def broadcast(self):
-        x1 = 1
-		while x1 == 1:
-            self.ser.write(b'AT+SBDWT=Hello World                    \r') #31 Bytes
-            sleep(.1)
-            self.ser.write(b'AT+SBDIX\r')
-            sleep(.1)
-            self.ser.write(b'AT+SBDD0\r')
-			x1 = 0
-			
-	sleep(80)
-	def image_transmission(self, stream_p):
+
+    def image_transmission(self, stream_p):
         split_stream = list(stream_p.recv_bytes())
-		x2 = 0
-        while x2 != 1
+        while True:
             if split_stream:
                 self.ser.write(("AT+SBDWT=" + bytes(split_stream[0:120]) + "\r").encode())
                 sleep(.1)
@@ -70,8 +57,15 @@ class Iridium:
                 del split_stream[0:120]
             else:
                 break
-				
-	sleep()
+
+    def broadcast(self):
+        while True:
+            self.ser.write(b'AT+SBDWT=Hello World                    \r') #31 Bytes
+            sleep(.1)
+            self.ser.write(b'AT+SBDIX\r')
+            sleep(.1)
+            self.ser.write(b'AT+SBDD0\r')
+
     def send_message(self, message):
         self.ser.write(('AT+SBDWRT=' + message + '\r').encode())
         sleep(.1)
@@ -83,7 +77,7 @@ def capture_picture(stream_c):
     camera = picamera.PiCamera()
     camera.exposure_mode = 'antishake'
 
-    sleep(40)
+    sleep(2)
     index = 0
     maximum = 135
 
