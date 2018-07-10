@@ -66,8 +66,8 @@ class Iridium:
             sleep(.1)
             self.ser.write(b'AT+SBDD0\r')
 
-    def send_message(self, message):
-        self.ser.write(('AT+SBDWRT=' + message + '\r').encode())
+    def send_message(self, laser_p):
+        self.ser.write(('AT+SBDWRT=' + laser_p.recv() + '\r').encode())
         sleep(.1)
         self.ser.write(b'AT+SBDIX\r')
         sleep(.1)
