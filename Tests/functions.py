@@ -25,7 +25,8 @@ class Laser:
         self.primary_instrument.write_register(4, value=20, functioncode=6)
 
     def measure(self, t, child):
-        while 1:
+        sleep(170)#remember that the first 20 or so seconds are booting up.
+		while 1:
             primary_pass = self.primary_instrument.read_register(24, functioncode=4)
             instance = None
 
