@@ -48,12 +48,15 @@ class Iridium:
     def image_transmission(self, stream_p):
         split_stream = list(stream_p.recv_bytes())
         while True:
-            self.ser.write(("AT+SBDWT=" + bytes(split_stream[0:120]) + "\r").encode())
-            sleep(.1)
-            self.ser.write(b'AT+SBDIX\r')
-            sleep(.1)
-            self.ser.write(b'AT+SBDD0\r')
-            del split_stream[0:120]
+            if split_stream:
+                self.ser.write(("AT+SBDWT=" + bytes(split_stream[0:120]) + "\r").encode())
+                sleep(.1)
+                self.ser.write(b'AT+SBDIX\r')
+                sleep(.1)
+                self.ser.write(b'AT+SBDD0\r')
+                del split_stream[0:120]
+            else:
+                break
 
     def broadcast(self):
         while True:
@@ -78,9 +81,11 @@ def capture_picture(stream_c):
     index = 0
     maximum = 135
 
-    photo_stream = BytesIO()
-    camera.capture(photo_stream, 'jpeg', resize=(38, 38))
-    stream_c.send_bytes(photo_stream.read())
+    for x in range(3):
+        photo_stream = BytesIO()
+        camera.capture(photo_stream, 'jpeg', resize=(38, 38))
+        stream_c.send_bytes(photo_stream.read())
+        del photo_stream
 
     while index < maximum:
         camera.capture("/home/pi/Pictures/pic" + str(index + 1) + ".png")
