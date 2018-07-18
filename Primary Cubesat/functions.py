@@ -54,7 +54,7 @@ class Iridium:
         self.ser.write(b'AT+SBDD0\r')
 
         while split_stream:
-            self.ser.write(("AT+SBDWT=[" + bytes(split_stream[0:118]) + "]\r").encode())
+            self.ser.write(("AT+SBDWT=[" + str(bytes(split_stream[0:118])) + "]\r").encode())
             sleep(.1)
             self.ser.write(b'AT+SBDIX\r')
             sleep(.1)
