@@ -47,27 +47,41 @@ class Iridium:
 
     def image_transmission(self, stream_p):
         split_stream = list(stream_p.recv_bytes())
+        self.ser.write(b'AT+SBDWT=[Start]')
+        sleep(.1)
+        self.ser.write(b'AT+SBDIX\r')
+        sleep(.1)
+        self.ser.write(b'AT+SBDD0\r')
+
+        while split_stream:
+            self.ser.write(("AT+SBDWT=[" + bytes(split_stream[0:118]) + "]\r").encode())
+            sleep(.1)
+            self.ser.write(b'AT+SBDIX\r')
+            sleep(.1)
+            self.ser.write(b'AT+SBDD0\r')
+            del split_stream[0:118]
+
+        self.ser.write(b'AT+SBDWT=[Stop]')
+        sleep(.1)
+        self.ser.write(b'AT+SBDIX\r')
+        sleep(.1)
+        self.ser.write(b'AT+SBDD0\r')
+
+    def register(self):
         while True:
-            if split_stream:
-                self.ser.write(("AT+SBDWT=" + bytes(split_stream[0:120]) + "\r").encode())
-                sleep(.1)
-                self.ser.write(b'AT+SBDIX\r')
-                sleep(.1)
-                self.ser.write(b'AT+SBDD0\r')
-                del split_stream[0:120]
-            else:
-                break
+            self.ser.write(b'AT+SBDREG')
+            sleep(.1)
 
     def broadcast(self):
         while True:
-            self.ser.write(b'AT+SBDWT=Hello World                    \r') #31 Bytes
+            self.ser.write(b'AT+SBDWT=(Hello World                    )\r') #31 Bytes
             sleep(.1)
             self.ser.write(b'AT+SBDIX\r')
             sleep(.1)
             self.ser.write(b'AT+SBDD0\r')
 
     def send_message(self, laser_p):
-        self.ser.write(('AT+SBDWRT=' + laser_p.recv() + '\r').encode())
+        self.ser.write(('AT+SBDWRT=(' + laser_p.recv() + ')\r').encode())
         sleep(.1)
         self.ser.write(b'AT+SBDIX\r')
         sleep(.1)
@@ -76,16 +90,20 @@ class Iridium:
 def capture_picture(stream_c):
     camera = picamera.PiCamera()
     camera.exposure_mode = 'antishake'
+    camera.resolution = (1025, 768)
 
     sleep(2)
     index = 0
     maximum = 135
 
     for x in range(3):
-        photo_stream = BytesIO()
-        camera.capture(photo_stream, 'jpeg', resize=(38, 38))
-        stream_c.send_bytes(photo_stream.read())
-        del photo_stream
+        file = open('image.jpg', 'wb')
+        camera.capture(file, resize=(38, 38))
+        file.close()
+
+        file = open('image.jpg', 'rb')
+        stream_c.send_bytes(file.read())
+        file.close()
 
     while index < maximum:
         camera.capture("/home/pi/Pictures/pic" + str(index + 1) + ".png")
