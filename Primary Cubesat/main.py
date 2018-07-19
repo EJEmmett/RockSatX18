@@ -14,6 +14,7 @@ def main():
     timekeeper = Process(target=clock, args=(t,))
     broadcast = Process(target=iridium.broadcast)
     image_transmission = Process(target=iridium.image_transmission, args=(stream_p,))
+    image_transmission_2 = Process(target=iridium.image_transmission, args=(stream_p,))
     laser_transmission = Process(target=iridium.send_message, args=(laser_p,))
     registration = Process(target=iridium.register)
 
@@ -51,10 +52,10 @@ def main():
     laser_list.terminate()
     file.write("The lasers stopped at:" + str(t[0]).zfill(2)+":"+str(t[1]).zfill(2) + '\n')
     sleep(1)
-    image_transmission.start()
+    image_transmission_2.start()
     file.write("The iridium started sending the pictures at: " + str(t[0]).zfill(2)+":"+str(t[1]).zfill(2) + '\n')
     sleep(649)
-    image_transmission.terminate()
+    image_transmission_2.terminate()
     file.write("The iridium stopped sending the pictures at: " + str(t[0]).zfill(2)+":"+str(t[1]).zfill(2) + '\n')
 
 main()
