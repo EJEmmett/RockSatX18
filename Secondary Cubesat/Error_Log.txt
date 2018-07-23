@@ -1,0 +1,37 @@
+This is used for debugging 
+
+Test on Fri, Jul 20, 2018 
+Traceback (most recent call last):
+  File "/usr/lib/python3/dist-packages/serial/serialposix.py", line 523, in write
+    n = os.write(self.fd, d)
+OSError: [Errno 5] Input/output error
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/pi/main.py", line 21, in <module>
+    main()
+  File "/home/pi/main.py", line 16, in main
+    ser.write('AT+SBDIX\r'.encode())
+  File "/usr/lib/python3/dist-packages/serial/serialposix.py", line 554, in write
+    raise SerialException('write failed: {}'.format(v))
+serial.serialutil.SerialException: write failed: [Errno 5] Input/output error
+
+Test on Sunday, Jul 22, 2018
+Traceback (most recent call last):
+  File "/usr/lib/python3/dist-packages/serial/serialposix.py", line 265, in open
+    self.fd = os.open(self.portstr, os.O_RDWR | os.O_NOCTTY | os.O_NONBLOCK)
+FileNotFoundError: [Errno 2] No such file or directory: '/dev/ttyUSB0'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/pi/main.py", line 24, in <module>
+    main()
+  File "/home/pi/main.py", line 8, in main
+    ser = serial.Serial(port='/dev/ttyUSB0', baudrate=19200, xonxoff=True)
+  File "/usr/lib/python3/dist-packages/serial/serialutil.py", line 236, in __init__
+    self.open()
+  File "/usr/lib/python3/dist-packages/serial/serialposix.py", line 268, in open
+    raise SerialException(msg.errno, "could not open port {}: {}".format(self._port, msg))
+serial.serialutil.SerialException: [Errno 2] could not open port /dev/ttyUSB0: [Errno 2] No such file or directory: '/dev/ttyUSB0'
