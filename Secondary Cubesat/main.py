@@ -11,7 +11,7 @@ def main():
         ser.write(b'AT+SBDREG')
         x = x + 1
     while True:
-        ser.write('AT+SBDWT=Major Tom to ground control                   \r'.encode())
+        ser.write('AT+SBDWT=[BM1:Major Tom to ground control               ]\r'.encode())
         sleep(.1)
         ser.write('AT+SBDIX\r'.encode())
         sleep(2)
