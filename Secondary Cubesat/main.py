@@ -13,11 +13,10 @@ def main():
         x = x + 1
     while True:
         ser.write('AT+SBDWT=[BM1:Major Tom to ground control               ]\r'.encode())
-		o.write("Began to beacan")
-		o.close()
+		o.write("Began to beacan I'm alive.")
         sleep(.1)
         ser.write('AT+SBDIX\r'.encode())
-		o.write("Sent beacan")
+		o.write("Sent the beacan.")
 		o.close()
         sleep(2)
         ser.write('AT+SBDD0\r'.encode())
