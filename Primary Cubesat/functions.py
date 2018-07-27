@@ -34,7 +34,7 @@ class Laser:
                 instance = primary_pass
 
             if instance is None:
-                laser_c.send("Laser passed at " + str(t[0]).zfill(2) + ":" + str(t[1]).zfill(2) + "          ")#31 Bytes
+                laser_c.send("Laser passed at " + str(t[0]).zfill(2) + ":" + str(t[1]).zfill(2) + "          ")#31 Bytesw	
 
 class Iridium:
     def __init__(self):
