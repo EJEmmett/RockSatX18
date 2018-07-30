@@ -3,7 +3,7 @@ from multiprocessing import Pipe, Process, Array
 from functions import Laser, Iridium, capture_picture, clock
 
 def main():
-    file = open("/home/pi/masterLog.txt", "a")
+    file = open("/home/pi/masterLog.txt", "a+")
     t = Array("i", 2)
     laser_p, laser_c = Pipe()
     stream_p, stream_c = Pipe()
@@ -37,9 +37,7 @@ def main():
     sleep(10)
     broadcast.terminate()
     file.write("The iridium stopped broadcasting at: " + str(t[0]).zfill(2)+":"+str(t[1]).zfill(2) + '\n')
-    print("The iridium stopped broadcasting at: " + str(t[0]).zfill(2)+":"+str(t[1]).zfill(2) + '\n')
     laser_list.start()
-    print("laser main")
     file.write("The lasers started at: " + str(t[0]).zfill(2)+":"+str(t[1]).zfill(2) + '\n')
     sleep(10)
     laser_transmission.start()

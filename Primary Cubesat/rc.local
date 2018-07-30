@@ -1,5 +1,5 @@
 #!/bin/sh -e
 
-sudo python3 /home/pi/main.py &
+sudo python3 /home/pi/main.py 2> error.txt &
 
 exit 0

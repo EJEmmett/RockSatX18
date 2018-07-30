@@ -45,41 +45,43 @@ class Iridium:
             self.ser = serial.Serial(port="/dev/ttyUSB0", baudrate=19200, xonxoff=True)
         self.ser.reset_input_buffer()
         self.ser.reset_output_buffer()
-
+	
     def image_transmission(self):
 		with open("/home/pi/image.jpg", "rb") as image:
-			stir = base64.b64encode(image.read())
+			encoded = base64.b64encode(image.read())
 		self.ser.write("AT+SBDWT=[Start]".encode())
         sleep(.1)
         self.ser.write("AT+SBDIX\r".encode())
         sleep(.1)
         self.ser.write("AT+SBDD0\r".encode())
 
-		s1 = stir[0:85]
-		s2 = stir[85:170]
-		s3 = stir[170:255]
-		s4 = stir[255:340]
-		s5 = stir[340:425]
-		s6 = stir[425:510]
-		s7 = stir[510:595]
-		s8 = stir[595:680]
-		s9 = stir[680:765]
-		s10 = stir[765:850]
-		s11 = stir[850:935]
-		s12 = stir[935:1020]
-		s13 = stir[1020:1105]
-		s14 = stir[1105:1190]
-		s15 = stir[1190:1275]
-		s16 = stir[1275:1360]
-		s17 = stir[1360:1445]
-		s18 = stir[1145:1530]
-		s19 = stir[1530:1615]
-		s20 = stir[1615:1700]
-		s21 = stir[1700:1785]
-		s22 = stir[1785:1870]
-		s23 = stir[1870:1955]
-		s24 = stir[1955:2040]
-
+		s1 = encoded[0:85]
+		s2 = encoded[85:170]
+		s3 = encoded[170:255]
+		s4 = encoded[255:340]
+		s5 = encoded[340:425]
+		s6 = encoded[425:510]
+		s7 = encoded[510:595]
+		s8 = encoded[595:680]
+		s9 = encoded[680:765]
+		s10 = encoded[765:850]
+		s11 = encoded[850:935]
+		s12 = encoded[935:1020]
+		s13 = encoded[1020:1105]
+		s14 = encoded[1105:1190]
+		s15 = encoded[1190:1275]
+		s16 = encoded[1275:1360]
+		s17 = encoded[1360:1445]
+		s18 = encoded[1145:1530]
+		s19 = encoded[1530:1615]
+		s20 = encoded[1615:1700]
+		s21 = encoded[1700:1785]
+		s22 = encoded[1785:1870]
+		s23 = encoded[1870:1955]
+		s24 = encoded[1955:2040]
+		
+		y = 0
+		
 		while y != 4:
 			self.ser.write("AT+SBDWT=".encode())  
 			p = ser.read(size=ser.in_waiting).decode().translate(str.maketrans( '', '', '')).split( )
@@ -127,7 +129,7 @@ class Iridium:
 			print(p)
 			sleep(1)
 			
-			self.ser.write("AT+SBDD)\r".encode())
+			self.ser.write("AT+SBDD0\r".encode())
 			sleep(.1)
 			
 			self.ser.write("AT+SBDWT=".encode())  
@@ -175,7 +177,7 @@ class Iridium:
 			sleep(1)
 
 			
-			self.ser.write("AT+SBDD)\r".encode())
+			self.ser.write("AT+SBDD0\r".encode())
 			sleep(.1)
 			
 			self.ser.write("AT+SBDWT=".encode())  
@@ -221,7 +223,7 @@ class Iridium:
 			print(p)
 			sleep(1)
 			  
-			self.ser.write("AT+SBDD)\r".encode())
+			self.ser.write("AT+SBDD0\r".encode())
 			sleep(.1)
 
 			self.ser.write("AT+SBDWT=".encode())  
@@ -270,7 +272,7 @@ class Iridium:
 			print(p)
 			sleep(1)
 
-			self.ser.write("AT+SBDD)\r".encode())
+			self.ser.write("AT+SBDD0\r".encode())
 			sleep(.1)
 			
 			self.ser.write("AT+SBDWT=".encode())  
@@ -365,7 +367,7 @@ class Iridium:
 			p = ser.read(size=ser.in_waiting).decode().translate(str.maketrans( '', '', '')).split( )
 			print(p)
 			sleep(1)
-			self.ser.write("AT+SBDD)\r".encode())
+			self.ser.write("AT+SBDD0\r".encode())
 			sleep(.1)
 			y += 1
 
