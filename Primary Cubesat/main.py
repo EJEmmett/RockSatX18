@@ -1,20 +1,19 @@
 from time import sleep
 from multiprocessing import Pipe, Process, Array
-from functions import Iridium, Laser, capture_picture, clock
+from functions import Laser, Iridium, capture_picture, clock
 
 def main():
-    file = open("/home/pi/masterLog.txt", "a+")
-
+    file = open("/home/pi/masterLog.txt", "a")
     t = Array("i", 2)
     laser_p, laser_c = Pipe()
     stream_p, stream_c = Pipe()
     iridium = Iridium()
     laser = Laser()
 
+    print("started")
     timekeeper = Process(target=clock, args=(t,))
     broadcast = Process(target=iridium.broadcast)
     image_transmission = Process(target=iridium.image_transmission, args=(stream_p,))
-    image_transmission_2 = Process(target=iridium.image_transmission, args=(stream_p,))
     laser_transmission = Process(target=iridium.send_message, args=(laser_p,))
     registration = Process(target=iridium.register)
 
@@ -22,8 +21,10 @@ def main():
     laser_list = Process(target=laser.measure, args=(laser_c, t,))
 
     timekeeper.start()
-    sleep(50)
-
+    sleep(6)
+    imaging.start()
+    sleep(20)
+    imaging.Stop()
     registration.start()
     file.write("The iridium started registering at: " + str(t[0]).zfill(2)+":"+str(t[1]).zfill(2) + '\n')
     sleep(10)
@@ -36,12 +37,9 @@ def main():
     sleep(10)
     broadcast.terminate()
     file.write("The iridium stopped broadcasting at: " + str(t[0]).zfill(2)+":"+str(t[1]).zfill(2) + '\n')
-    image_transmission.start()
-    file.write("The iridium started sending the pictures at: " + str(t[0]).zfill(2)+":"+str(t[1]).zfill(2) + '\n')
-    sleep(100)
-    image_transmission.terminate()
-    file.write("The iridium stopped sending the pictures at: " + str(t[0]).zfill(2)+":"+str(t[1]).zfill(2) + '\n')
+    print("The iridium stopped broadcasting at: " + str(t[0]).zfill(2)+":"+str(t[1]).zfill(2) + '\n')
     laser_list.start()
+    print("laser main")
     file.write("The lasers started at: " + str(t[0]).zfill(2)+":"+str(t[1]).zfill(2) + '\n')
     sleep(10)
     laser_transmission.start()
@@ -52,10 +50,10 @@ def main():
     laser_list.terminate()
     file.write("The lasers stopped at:" + str(t[0]).zfill(2)+":"+str(t[1]).zfill(2) + '\n')
     sleep(1)
-    image_transmission_2.start()
+    image_transmission.start()
     file.write("The iridium started sending the pictures at: " + str(t[0]).zfill(2)+":"+str(t[1]).zfill(2) + '\n')
     sleep(649)
-    image_transmission_2.terminate()
+    image_transmission.terminate()
     file.write("The iridium stopped sending the pictures at: " + str(t[0]).zfill(2)+":"+str(t[1]).zfill(2) + '\n')
 
 main()
