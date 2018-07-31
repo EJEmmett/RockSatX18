@@ -11,17 +11,18 @@ while x != 10:
     print(p)
     x += 1
     sleep(2)
- 
-	sleep(1)
-	ser.write('AT+SBDIX\r'.encode())
-	p = ser.read(size=ser.in_waiting).decode().translate(str.maketrans( '', '', ',')).split(" ")
-	print(p)
-	
-	sleep(2)
-	ser.write('AT+SBDD0\r'.encode())
-	p = ser.read(size=ser.in_waiting).decode().translate(str.maketrans( '', '', ',')).split(" ")
-	
-	sleep(1)
+
+    while y != 10: 
+        sleep(1)
+        ser.write('AT+SBDIX\r'.encode())
+        p = ser.read(size=ser.in_waiting).decode().translate(str.maketrans( '', '', ',')).split(" ")
+		print(p)
+        y += 1
+        sleep(2)
+        ser.write('AT+SBDD0\r'.encode())
+        p = ser.read(size=ser.in_waiting).decode().translate(str.maketrans( '', '', ',')).split(" ")
+     
+		sleep(1)
 
 ser.write("AT+SBDWT=[TEST    ]\r".encode())
 p = ser.read(size=ser.in_waiting).decode().translate(str.maketrans( '', '', '')).split(" ")

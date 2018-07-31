@@ -48,37 +48,37 @@ class Iridium:
 	
     def image_transmission(self):
 		with open("/home/pi/image.jpg", "rb") as image:
-			encoded = base64.b64encode(image.read())
+			"AT+SBDWT="  + encoded = base64.b64encode(image.read())
 		self.ser.write("AT+SBDWT=[Start]".encode())
         sleep(.1)
         self.ser.write("AT+SBDIX\r".encode())
         sleep(.1)
         self.ser.write("AT+SBDD0\r".encode())
 
-		s1 = encoded[0:85]
-		s2 = encoded[85:170]
-		s3 = encoded[170:255]
-		s4 = encoded[255:340]
-		s5 = encoded[340:425]
-		s6 = encoded[425:510]
-		s7 = encoded[510:595]
-		s8 = encoded[595:680]
-		s9 = encoded[680:765]
-		s10 = encoded[765:850]
-		s11 = encoded[850:935]
-		s12 = encoded[935:1020]
-		s13 = encoded[1020:1105]
-		s14 = encoded[1105:1190]
-		s15 = encoded[1190:1275]
-		s16 = encoded[1275:1360]
-		s17 = encoded[1360:1445]
-		s18 = encoded[1145:1530]
-		s19 = encoded[1530:1615]
-		s20 = encoded[1615:1700]
-		s21 = encoded[1700:1785]
-		s22 = encoded[1785:1870]
-		s23 = encoded[1870:1955]
-		s24 = encoded[1955:2040]
+		s1 = "AT+SBDWT="  + encoded[0:85]
+		s2 = "AT+SBDWT="  + encoded[85:170]
+		s3 = "AT+SBDWT="  + encoded[170:255]
+		s4 = "AT+SBDWT="  + encoded[255:340]
+		s5 = "AT+SBDWT="  + encoded[340:425]
+		s6 = "AT+SBDWT="  + encoded[425:510]
+		s7 = "AT+SBDWT="  + encoded[510:595]
+		s8 = "AT+SBDWT="  + encoded[595:680]
+		s9 = "AT+SBDWT="  + encoded[680:765]
+		s10 = "AT+SBDWT="  + encoded[765:850]
+		s11 = "AT+SBDWT="  + encoded[850:935]
+		s12 = "AT+SBDWT="  + encoded[935:1020]
+		s13 = "AT+SBDWT="  + encoded[1020:1105]
+		s14 = "AT+SBDWT="  + encoded[1105:1190]
+		s15 = "AT+SBDWT="  + encoded[1190:1275]
+		s16 = "AT+SBDWT="  + encoded[1275:1360]
+		s17 = "AT+SBDWT="  + encoded[1360:1445]
+		s18 = "AT+SBDWT="  + encoded[1145:1530]
+		s19 = "AT+SBDWT="  + encoded[1530:1615]
+		s20 = "AT+SBDWT="  + encoded[1615:1700]
+		s21 = "AT+SBDWT="  + encoded[1700:1785]
+		s22 = "AT+SBDWT="  + encoded[1785:1870]
+		s23 = "AT+SBDWT="  + encoded[1870:1955]
+		s24 = "AT+SBDWT="  + encoded[1955:2040]
 		
 		y = 0
 		
