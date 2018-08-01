@@ -19,6 +19,7 @@ def clock(t):
 
 class Laser:
     def __init__(self):
+        print("LASERS")
         mini.BAUDRATE = 115200
         try:
             self.primary_instrument = mini.Instrument("/dev/ttyUSB0", 1, mode='rtu')
@@ -36,6 +37,7 @@ class Laser:
 
             if instance is None:
                 laser_c.send("Laser passed at " + str(t[0]).zfill(2) + ":" + str(t[1]).zfill(2) + "          ")#31 Bytesw   
+                print(laser_c)
 
 class Iridium:
     def __init__(self):
@@ -76,6 +78,7 @@ class Iridium:
         y = 0
         
         while y != 12:
+            len(encoded)
             for number in range(4):
                 print("1")
                 self.ser.write(s1 + "[1\r".encode()) 
@@ -87,13 +90,13 @@ class Iridium:
                 print(p)
                 sleep(1)
 
-                ser.write("AT+SBDD0\r".encode())
+                self.ser.write("AT+SBDD0\r".encode())
                 sleep(4)
             
             for number in range(4):
                 print("2")
                 self.ser.write(s2 + "[2\r".encode()) 
-                p = self.ser.read(size=ser.in_waiting).decode().translate(str.maketrans( '', '', '')).split( )
+                p = self.ser.read(size=self.ser.in_waiting).decode().translate(str.maketrans( '', '', '')).split( )
                 print(p)  
                 sleep(2)  
                 self.ser.write("AT+SBDIX\r".encode())
@@ -125,7 +128,7 @@ class Iridium:
                 print(p)
                 sleep(2)    
                 self.ser.write("AT+SBDIX\r".encode())
-                p = self.ser.read(size=ser.in_waiting).decode().translate(str.maketrans( '', '', '')).split( )
+                p = self.ser.read(size=self.ser.in_waiting).decode().translate(str.maketrans( '', '', '')).split( )
                 print(p)
                 sleep(1)
                
@@ -294,55 +297,67 @@ class Iridium:
             sleep(4)
             
 
+            for number in range(4):
+                self.ser.write(s17 + "[17\r".encode()) 
+                p = self.ser.read(size=self.ser.in_waiting).decode().translate(str.maketrans( '', '', '')).split( )
+                print(p)
+                sleep(2)    
+                self.ser.write("AT+SBDIX\r".encode())
+                p = self.ser.read(size=self.ser.in_waiting).decode().translate(str.maketrans( '', '', '')).split( )
+                print(p)
+                sleep(1)
+              
             self.ser.write("AT+SBDD0\r".encode())
             sleep(4)
             y += 1
+
+
 
         self.ser.write("AT+SBDWT=[Stop]".encode())
         sleep(.1)
         self.ser.write(b"AT+SBDIX\r")
         sleep(.1)
         self.ser.write("AT+SBDD0\r".encode())
-		
-		def register(self):
-			while True:
-				self.ser.write(b"AT+SBDREG")
-				sleep(.1)
+
+    def register(self):
+        while True:
+            self.ser.write(b"AT+SBDREG")
+            sleep(.1)
 
     def broadcast(self):
         while True:
             self.ser.write("AT+SBDWT=(B2:Hello World                    )\r".encode()) #31 Bytes
-            sleep(1)
+            sleep(.1)
             self.ser.write("AT+SBDIX\r".encode())
-            sleep(1)
+            sleep(.1)
             self.ser.write("AT+SBDD0\r".encode())
 
     def send_message(self, laser_p):
         self.ser.write(("AT+SBDWT=(" + laser_p.recv() + ")\r").encode())
-		p = self.ser.read(size=self.ser.in_waiting).decode().translate(str.maketrans( '', '', '')).split( )
-		print(p)
-		sleep(1)
+        p = self.ser.read(size=self.ser.in_waiting).decode().translate(str.maketrans( '', '', '')).split( )
+        print(p)
+        sleep(.1)
         self.ser.write("AT+SBDIX\r".encode())
-		p = self.ser.read(size=self.ser.in_waiting).decode().translate(str.maketrans( '', '', '')).split( )
-		print(p)		
-        sleep(2)
+        p = self.ser.read(size=self.ser.in_waiting).decode().translate(str.maketrans( '', '', '')).split( )
+        print(p)
+        sleep(.1)
         self.ser.write("AT+SBDD0\r".encode())
+        
+def capture_picture():
+    camera = picamera.PiCamera()
+    camera.exposure_mode = 'antishake'
+    camera.resolution = (1025, 768)
+        
+    sleep(2)
+    index = 0
+    maximum = 135
 
-	def capture_picture(self):
-		camera = picamera.PiCamera()
-		camera.exposure_mode = 'antishake'
-		camera.resolution = (1025, 768)
-		
-		sleep(2)
-		index = 0
-		maximum = 135
+    for x in range(3):
+        file = open('/home/pi/image.jpg', 'wb')
+        camera.capture(file, resize=(19, 19))
+        file.close()
 
-		for x in range(3):
-			file = open('/home/pi/image.jpg', 'wb')
-			camera.capture(file, resize=(19, 19))
-			file.close()
-
-		while index < maximum:
-			camera.capture("/home/pi/Pictures/pic" + str(index + 1) + ".png")
-			index += 1
-			sleep(5)
+    while index < maximum:
+        camera.capture("/home/pi/Pictures/pic" + str(index + 1) + ".png")
+        index += 1
+        sleep(5)
