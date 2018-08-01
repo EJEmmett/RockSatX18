@@ -113,7 +113,7 @@ class Iridium:
                 print("4")
                 self.ser.write(s4 + "[4\r".encode()) 
                 sleep(2)    
-                self.ser.write("AT+SBDIX\r".encode()))
+                self.ser.write("AT+SBDIX\r".encode())
                 sleep(1)
                
 				self.ser.write("AT+SBDD0\r".encode())
