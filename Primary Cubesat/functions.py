@@ -17,27 +17,27 @@ def clock(t):
         t[1] = second
         sleep(1)
 
-class Laser:
-    def __init__(self):
-        mini.BAUDRATE = 115200
-        try:
-            self.primary_instrument = mini.Instrument("/dev/ttyUSB0", 1, mode='rtu')
-        except:
-            self.primary_instrument = mini.Instrument("/dev/ttyUSB1", 1, mode='rtu')
-        self.primary_instrument.write_register(4, value=20, functioncode=6)
-
-    def measure(self, t):
-		laserFile = open("/home/pi/laser.log", "a+")
-        while 1:
-            primary_pass = self.primary_instrument.read_register(24, functioncode=4)
-            instance = None
-
-            if primary_pass is not 0:
-                instance = primary_pass
-
-            if instance is None:
-                laser_c.send("Laser passed at " + str(t[0]).zfill(2) + ":" + str(t[1]).zfill(2) + "          ")#31 Bytesw   
-                laserFile(laser_c.send)
+#class Laser:
+#    def __init__(self):
+#        mini.BAUDRATE = 115200
+#        try:
+#            self.primary_instrument = mini.Instrument("/dev/ttyUSB0", 1, mode='rtu')
+#       except:
+#            self.primary_instrument = mini.Instrument("/dev/ttyUSB1", 1, mode='rtu')
+#        self.primary_instrument.write_register(4, value=20, functioncode=6)
+#
+#    def measure(self, t):
+#		laserFile = open("/home/pi/laser.log", "a+")
+#        while 1:
+#            primary_pass = self.primary_instrument.read_register(24, functioncode=4)
+#            instance = None
+#
+#            if primary_pass is not 0:
+#                instance = primary_pass
+#
+#           if instance is None:
+#                laser_c.send("Laser passed at " + str(t[0]).zfill(2) + ":" + str(t[1]).zfill(2) + "          ")#31 Bytesw   
+#                laserFile(laser_c.send)
 				
 class Iridium:
     def __init__(self):
@@ -259,8 +259,17 @@ class Iridium:
             self.ser.write("AT+SBDIX\r".encode())
             sleep(2)
             self.ser.write("AT+SBDD0\r".encode())
+def pic_for_sending():
+	camera = picamera.PiCamera()
+    camera.exposure_mode = 'antishake'
+    camera.resolution = (1025, 768)
+    
+	for x in range(3):
+        file = open('/home/pi/image.jpg', 'wb')
+        camera.capture(file, resize=(15, 15))
+        file.close()
+		
 
-        
 def capture_picture():
     camera = picamera.PiCamera()
     camera.exposure_mode = 'antishake'
@@ -270,10 +279,6 @@ def capture_picture():
     index = 0
     maximum = 135
 
-    for x in range(3):
-        file = open('/home/pi/image.jpg', 'wb')
-        camera.capture(file, resize=(15, 15))
-        file.close()
 
     while index < maximum:
         camera.capture("/home/pi/Pictures/pic" + str(index + 1) + ".png")
