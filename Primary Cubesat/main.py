@@ -17,7 +17,7 @@ def main():
     registration = Process(target=iridium.register)
 
     imaging = Process(target=capture_picture)
-    laser_list = Process(target=laser.measure, args=(laser_c, t,))
+    laser_list = Process(target=laser.measure, args=(laser_c, t))
 
     timekeeper.start()
     sleep(6)
@@ -26,8 +26,6 @@ def main():
     imaging.terminate()
     registration.start()
     file.write("The iridium started registering at: " + str(t[0]).zfill(2)+":"+str(t[1]).zfill(2) + '\n')
-    sleep(10)
-    imaging.start()
     sleep(10)
     registration.terminate()
     file.write("The iridium stopped registering at: " + str(t[0]).zfill(2)+":"+str(t[1]).zfill(2) + '\n')
