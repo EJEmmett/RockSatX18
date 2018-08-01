@@ -48,7 +48,7 @@ class Iridium:
 	
     def image_transmission(self):
 		with open("/home/pi/image.jpg", "rb") as image:
-			"AT+SBDWT="  + encoded = base64.b64encode(image.read())
+			encoded = base64.b64encode(image.read())
 		self.ser.write("AT+SBDWT=[Start]".encode())
         sleep(.1)
         self.ser.write("AT+SBDIX\r".encode())
