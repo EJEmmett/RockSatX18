@@ -270,7 +270,7 @@ def capture_picture():
     index = 0
     maximum = 135
 
-	for x in range(3):
+	for x in range(1):
         file = open('/home/pi/image.jpg', 'wb')
         camera.capture(file, resize=(15, 15))
         file.close()
