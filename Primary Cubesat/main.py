@@ -16,7 +16,7 @@ def main():
     registration = Process(target=iridium.register)
 
     imaging = Process(target=capture_picture)
-	imaging2 = Process(target= pic_for_sending)
+ 
 
     timekeeper.start()
     sleep(26)
@@ -29,15 +29,11 @@ def main():
     broadcast.start()
     file.write("The iridium started broadcasting at: " + str(t[0]).zfill(2)+":"+str(t[1]).zfill(2) + '\n')
     sleep(10)
-	imaging.start()
-	sleep(49)
-	imaging2.start()
-	sleep(1)
-	imaging2.terminate()
     broadcast.terminate()
-	image_transmission.start()
     file.write("The iridium stopped broadcasting at: " + str(t[0]).zfill(2)+":"+str(t[1]).zfill(2) + '\n'
     sleep(60)
+    print("entering  image sending")
+    image_transmission.start()
     file.write("The iridium started sending the pictures at: " + str(t[0]).zfill(2)+":"+str(t[1]).zfill(2) + '\n')
     sleep(649)
     image_transmission.terminate()

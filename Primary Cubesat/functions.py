@@ -259,16 +259,7 @@ class Iridium:
             self.ser.write("AT+SBDIX\r".encode())
             sleep(2)
             self.ser.write("AT+SBDD0\r".encode())
-def pic_for_sending():
-	camera = picamera.PiCamera()
-    camera.exposure_mode = 'antishake'
-    camera.resolution = (1025, 768)
-    
-	for x in range(3):
-        file = open('/home/pi/image.jpg', 'wb')
-        camera.capture(file, resize=(15, 15))
-        file.close()
-		
+	
 
 def capture_picture():
     camera = picamera.PiCamera()
@@ -279,6 +270,10 @@ def capture_picture():
     index = 0
     maximum = 135
 
+	for x in range(3):
+        file = open('/home/pi/image.jpg', 'wb')
+        camera.capture(file, resize=(15, 15))
+        file.close()
 
     while index < maximum:
         camera.capture("/home/pi/Pictures/pic" + str(index + 1) + ".png")
