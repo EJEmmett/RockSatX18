@@ -77,7 +77,7 @@ class Iridium:
         s17 = "AT+SBDWT=".encode()  + encoded[1360:1445]
                 
         
-        while y != 12:
+        while y != 1200:
             len(encoded)
             for number in range(4):
                 print("1")
