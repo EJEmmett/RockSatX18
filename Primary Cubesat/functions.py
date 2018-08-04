@@ -57,7 +57,7 @@ class Iridium:
         sleep(.1)
         self.ser.write("AT+SBDD0\r".encode())
 		
-		y = 0
+		
         s1 = "AT+SBDWT=".encode()  + encoded[0:85]
         s2 = "AT+SBDWT=".encode()  + encoded[85:170]
         s3 = "AT+SBDWT=".encode()  + encoded[170:255]
@@ -77,7 +77,7 @@ class Iridium:
         s17 = "AT+SBDWT=".encode()  + encoded[1360:1445]
                 
         
-        while y != 1200:
+        while True:
             len(encoded)
             for number in range(4):
                 print("1")
