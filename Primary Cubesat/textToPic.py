@@ -1,7 +1,15 @@
 import base64
+import os
 from time import sleep
 
-with open("/home/sam/Downloads/SBD/picBASE64.txt") as f:
+os.system("unzip *.zip")
+sleep(1)
+os.system("rename -v 's/.sbd/.txt' *.sbd")
+sleep(1)
+os.system("mv *.txt /home/root/Downloads/SBD/")
+sleep(1)
+
+with open("/home/root/Downloads/SBD/picBASE64.txt") as f:
     c1 = f.readline(1)
     c1 = c1[:-2]
     c2 = f.readline(2)
@@ -42,7 +50,7 @@ c = c1 + c2 + c3 + c4 + c5 + c6 + c7 + c8 + c9 + c10
 c = c + c11 + c12 + c13 + c14 + c15 + c16 + c17 + c18 + c19 + c20
 c = c + c21 + c22 + c23 + c24 + c25 + c26 + c27
 c = base64.b64decode(c)
-with open("/home/sam/Downloads/pic.jpg", "w") as pic:
+with open("/home/root/Downloads/SBD/pic.jpg", "w") as pic:
         pic.write(c)
         pic.close()
         f.close()
