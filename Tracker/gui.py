@@ -83,7 +83,6 @@ class BeaconMapper(object):
         self.beacon_locations = [] # List of current location for each beacon
         # Colours for beacon markers and paths - supported by both Tkinter and Google Static Maps API
         self.beacon_colours = ['red','yellow','green','blue','purple','gray','brown','orange']
-        self.sbd = []
         self.coords = coords
         # Limit path lengths to this many characters depending on how many beacons are being tracked
         # (Google allows combined URLs of up to 8192 characters)
@@ -187,16 +186,6 @@ class BeaconMapper(object):
         self.quit_button = tk.Button(self.toolFrame, text="Quit", font=self.boldFont, width=20, height=2, command=self.QUIT)
         self.quit_button.grid(row=row,column=1,rowspan=2)
 
-        # Menu to list current beacon locations
-        self.menubar = tk.Menu(self.window)
-        self.beacon_menu = tk.Menu(self.menubar, tearoff=0)
-        self.menubar.add_cascade(label="Beacon Locations", menu=self.beacon_menu)
-        self.window.config(menu=self.menubar)
-
-        # Set up next update
-        self.last_update_at = time.time() # Last time an update was requested
-        self.next_update_at = self.last_update_at #+ self.default_interval # Do first update after this many seconds
-
         # Timer
         self.window.after(2000,self.timer) # First timer event after 2 secs
 
@@ -254,9 +243,6 @@ class BeaconMapper(object):
             self.beacon_location.delete(0, tk.END)
             self.beacon_location.insert(0, position_str)
             self.beacon_location.config(state='readonly')
-            # Update Beacon Location menu
-            label_str = imei + ' : ' + position_str
-            self.beacon_menu.entryconfig(self.beacon_imeis[imei], label=label_str, background=self.beacon_colours[self.beacon_imeis[imei]])
 
     def update_map(self):
         ''' Show beacon locations and the beacon routes using Google Maps API StaticMap '''
