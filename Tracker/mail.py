@@ -31,7 +31,7 @@ class Mail():
                     else:
                         print("Position",str(int(pos)+1), "is full")
                 sleep(.5)
-                os.system('clear')
+                os.system('tput reset')
 
     def start(self, d, q):
         coords = [None]*2
