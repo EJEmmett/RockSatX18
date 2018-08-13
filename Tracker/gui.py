@@ -50,12 +50,11 @@
 import tkinter as tk
 from tkinter import messagebox as tkMessageBox
 from tkinter import font as tkFont
-import time
 from urllib import request
 from PIL import Image, ImageTk
 import math
 import numpy as np
-from multiprocessing import Process, Array, Queue
+from multiprocessing import Process, Queue
 import mail
 
 class BeaconMapper(object):
