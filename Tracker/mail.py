@@ -17,13 +17,13 @@ class Mail():
             else:
                 pass
             if not None in array:
-                print(array)
                 for num in array:
-                    base64.b64decode(num)
-                    completed += num.encode()
+                    completed += base64.b64decode(num)
 
                 with open("final.jpeg", "wb") as f:
                     f.write(completed)
+                    print("File Saved")
+                    return
             else:
                 for pos, num in enumerate(array):
                     if num is None:
@@ -31,8 +31,8 @@ class Mail():
                     else:
                         print("Position",str(int(pos)+1), "is full")
                 sleep(.5)
-                os.system('tput reset')
-
+                #os.system('tput reset')
+                #os.system('clear')
     def start(self, d, q):
         coords = [None]*2
         while True:
