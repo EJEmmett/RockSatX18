@@ -1,52 +1,4 @@
 #!/usr/bin/env python3
-
-## Iridium 9603N Beacon Mapper
-
-## Written by Paul Clark: Jan 2018.
-
-## Builds a list of all existing sbd files.
-## Once per minute, checks for the appearance of a new sbd file.
-## When one is found, parses the file and displays the beacon position and route
-## using the Google Static Maps API.
-## https://developers.google.com/maps/documentation/static-maps/intro
-## You will need a Key to access the API. You can create one by following this link:
-## https://developers.google.com/maps/documentation/static-maps/get-api-key
-## Copy and paste it into a file called Google_Static_Maps_API_Key.txt
-
-## The software makes extensive use of the Google Static Map API.
-## The displayed map is automatically centered on a new beacon position.
-## The center position can be changed by left-clicking in the image.
-## A right-click will copy the click location (lat,lon) to the clipboard.
-## The zoom can be changed using the buttons.
-
-## Each beacon's path is displayed as a coloured line on the map.
-## The oldest waypoints may be deleted as the map URL is limited to 8192 characters.
-
-## A pull-down menu lists the locations of all the beacons being tracked.
-## Clicking on a menu entry will center the map on that location and will copy that location
-## to the clipboard.
-
-## The GUI uses 640x480 pixel map images. Higher resolution images are available
-## if you have a premium plan with Google.
-
-# sbd file contains the following in csv format:
-# Column 0 = GPS Tx Time (YYYYMMDDHHMMSS) (Start of 9603 Tx session)
-# Column 1 = GPS Latitude (degrees) (float)
-# Column 2 = GPS Longitude (degrees) (float)
-# Column 3 = GPS Altitude (m) (int)
-# Column 4 = GPS Speed (m/s) (float)
-# Column 5 = GPS Heading (Degrees) (int)
-# Column 6 = GPS HDOP (m) (float)
-# Column 7 = GPS satellites (int)
-# Coulmn 8 = Pressure (Pascals) (int)
-# Column 9 = Temperature (C) (float)
-# Column 10 = Battery (V) (float)
-# Column 11 = Iteration Count (int)
-# (Optional) Column 12 = The Beacon's RockBLOCK serial number (Iridium9603NBeacon_V4.ino)
-
-# Converters
-# 0:mdates.strpdate2num('%Y%m%d%H%M%S')
-
 import tkinter as tk
 from tkinter import messagebox as tkMessageBox
 from tkinter import font as tkFont
@@ -65,11 +17,11 @@ class BeaconMapper(object):
 
         # Default values
         self._job = None # Keep track of timer calls
-        self.zoom = '15' # Default Google Maps zoom (text)
+        self.zoom = '10' # Default Google Maps zoom (text)
         self.default_interval = 60 # Default update interval (secs)
         self.sep_width = 304 # Separator width in pixels
-        self.map_lat = 0.0 # Map latitude (degrees)
-        self.map_lon = 0.0 # Map longitude (degrees)
+        self.map_lat = 37.844039 # Map latitude (degrees)
+        self.map_lon = -75.483391 # Map longitude (degrees)
         self.frame_height = 480 # Google Static Map window width
         self.frame_width = 640 # Google Static Map window height
         self.delta_limit_pixels = 200 # If base to beacon angle (delta) exceeds this many pixels, decrease the zoom level accordingly
@@ -88,7 +40,7 @@ class BeaconMapper(object):
         # The first entry is redundant (i.e. would be used when tracking zero beacons)
         # These limits take into account that each pipe ('|') is expanded to '%7C' by urllib
         self.max_path_lengths = [7000, 7000, 3400, 2200, 1600, 1300, 1050, 900, 780]
-
+        self.past_url = ""
         # Google static map API pixel scales to help with map moves
         # https://gis.stackexchange.com/questions/7430/what-ratio-scales-do-google-maps-zoom-levels-correspond-to
         # ---
@@ -197,7 +149,7 @@ class BeaconMapper(object):
         self.set_coords()
         self.update_map() # Update the Google Static Maps image
 
-        self._job = self.window.after(5000, self.timer) # Schedule another timer event in 0.25s
+        self._job = self.window.after(100, self.timer) # Schedule another timer event in 0.25s
 
     def set_coords(self):
         imei = "300434063827480"
@@ -206,31 +158,25 @@ class BeaconMapper(object):
             latitude = coords[0]
             longitude = coords[1]
         else:
-            latitude = 0
-            longitude = 0
+            return
         position_str = "{:.6f},{:.6f}".format(latitude, longitude) # Construct position
         if imei not in self.beacon_imeis:
             self.beacon_imeis[imei] = self.beacons # Add this imei and its beacon number
             self.beacon_paths.append('&path=color:'+self.beacon_colours[self.beacons]+'|weight:5') # Append an empty path for this beacon
             self.beacon_locations.append('') # Append a NULL location for this beacon
             self.beacons += 1 # Increment the number of beacons being tracked
-            # This is a new beacon so center map on its location this time only
             self.map_lat = latitude
             self.map_lon = longitude
-
         else:
             # Update beacon location
-            if position_str == "0.000000,0.000000":
-                pass
-            else:
-                self.beacon_locations[self.beacon_imeis[imei]] = position_str # Update location for this beacon
-                # Change beacon location background colour
-                self.beacon_location_txt.config(background=self.beacon_colours[self.beacon_imeis[imei]])
+            self.beacon_locations[self.beacon_imeis[imei]] = position_str # Update location for this beacon
+            # Change beacon location background colour
+            self.beacon_location_txt.config(background=self.beacon_colours[self.beacon_imeis[imei]])
 
-                # Update beacon path (append this location to the path for this beacon)
-                self.beacon_paths[self.beacon_imeis[imei]] += '|' + position_str
+            # Update beacon path (append this location to the path for this beacon)
+            self.beacon_paths[self.beacon_imeis[imei]] += '|' + position_str
 
-                # Check path length hasn't exceeded the maximum
+            # Check path length hasn't exceeded the maximum
             def find_char(s, ch): # https://stackoverflow.com/a/11122355
                 return [i for i, ltr in enumerate(s) if ltr == ch]
             while len(self.beacon_paths[self.beacon_imeis[imei]]) > self.max_path_lengths[self.beacons]:
@@ -250,28 +196,32 @@ class BeaconMapper(object):
         center = ("%.6f"%self.map_lat) + ',' + ("%.6f"%self.map_lon)
 
         # Update the Google Maps API StaticMap URL
-        self.path_url = 'https://maps.googleapis.com/maps/api/staticmap?center=' # 54 chars
-        self.path_url += center # 22 chars
+        path_url = 'https://maps.googleapis.com/maps/api/staticmap?center=' # 54 chars
+        path_url += center # 22 chars
         if self.beacons > 0: # Do we have any valid beacons?
             for beacon in range(self.beacons):
-                self.path_url += '&markers=color:' + self.beacon_colours[beacon] + '|' # beacons*(15+6+3+22) chars
-                self.path_url += self.beacon_locations[beacon]
+                path_url += '&markers=color:' + self.beacon_colours[beacon] + '|' # beacons*(15+6+3+22) chars
+                path_url += self.beacon_locations[beacon]
            # Path 'header' is 29 chars
            # Minimum length for each waypoint is 18 chars but will grow to 20 when pipe is expanded
            # This needs to be included in the max_path_length
             for beacon in range(self.beacons):
-                self.path_url += self.beacon_paths[beacon]
-        self.path_url += '&zoom=' # 8 chars
-        self.path_url += self.zoom
-        self.path_url += '&size=' # 13 chars
-        self.path_url += str(self.frame_width)
-        self.path_url += 'x'
-        self.path_url += str(self.frame_height)
-        self.path_url += '&maptype=' + self.map_type + '&format=png' # 35 chars
+                path_url += self.beacon_paths[beacon]
+        path_url += '&zoom=' # 8 chars
+        path_url += self.zoom
+        path_url += '&size=' # 13 chars
+        path_url += str(self.frame_width)
+        path_url += 'x'
+        path_url += str(self.frame_height)
+        path_url += '&maptype=' + self.map_type + '&format=png' # 35 chars
+        print(path_url)
         # Download the API map image from Google
         filename = "map_image.png" # Download map to this file
         try:
-            request.urlretrieve(self.path_url,filename)
+            if path_url != self.past_url:
+                request.urlretrieve(path_url,filename)
+            else:
+                return
         except:
             filename = "map_image_blank.png" # If download failed, default to blank image
 
@@ -286,6 +236,7 @@ class BeaconMapper(object):
             self.zoom_in_button.config(state='normal') # Enable zoom+
             self.zoom_out_button.config(state='normal') # Enable zoom-
             self.enable_clicks = True # Enable mouse clicks
+            self.past_url = path_url
         else: # Else disable them again
             self.zoom_in_button.config(state='disabled') # Disable zoom+
             self.zoom_out_button.config(state='disabled') # Disable zoom-
