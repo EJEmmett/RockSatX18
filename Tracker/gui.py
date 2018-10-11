@@ -7,13 +7,19 @@ from PIL import Image, ImageTk
 import math
 import numpy as np
 from multiprocessing import Process, Queue
-import mail
+import email
+import imaplib
 
 class BeaconMapper(object):
 
-    def __init__(self, coords):
+    def __init__(self):
         ''' Init BeaconMapper: check for existing SBD files; read API key; set up the Tkinter window '''
         print('Start')
+
+        #Login
+        self.m = imaplib.IMAP4_SSL('imap.gmail.com')
+        self.m.login("Ccprojecthermes@gmail.com", "Hermes123321#")
+        self.m.select('INBOX')
 
         # Default values
         self._job = None # Keep track of timer calls
@@ -34,13 +40,14 @@ class BeaconMapper(object):
         self.beacon_locations = [] # List of current location for each beacon
         # Colours for beacon markers and paths - supported by both Tkinter and Google Static Maps API
         self.beacon_colours = ['red','yellow','green','blue','purple','gray','brown','orange']
-        self.coords = coords
+        self.coords = [0]*2
         # Limit path lengths to this many characters depending on how many beacons are being tracked
         # (Google allows combined URLs of up to 8192 characters)
         # The first entry is redundant (i.e. would be used when tracking zero beacons)
         # These limits take into account that each pipe ('|') is expanded to '%7C' by urllib
         self.max_path_lengths = [7000, 7000, 3400, 2200, 1600, 1300, 1050, 900, 780]
         self.past_url = ""
+        self.changed_center = 0
         # Google static map API pixel scales to help with map moves
         # https://gis.stackexchange.com/questions/7430/what-ratio-scales-do-google-maps-zoom-levels-correspond-to
         # ---
@@ -146,17 +153,40 @@ class BeaconMapper(object):
     def timer(self):
         ''' Timer function - calls itself repeatedly to schedule map updates '''
         #if do_update: # If it is time to do an update
+        self.update_coords()
         self.set_coords()
         self.update_map() # Update the Google Static Maps image
 
         self._job = self.window.after(100, self.timer) # Schedule another timer event in 0.25s
 
+    def update_coords(self):
+        typ, data = self.m.search(None, '(ON 8-Aug-2018 SUBJECT "SBD Msg From Unit: 300434063827480" UNSEEN)')
+        for num in data[0].split():
+            typ, message = self.m.fetch(num, '(RFC822)')
+            body = message[0][1]
+            mail = email.message_from_bytes(body)
+            x = 0
+            for part in mail.walk():
+                if part.get_content_maintype() == 'multipart':
+                    continue
+                if part.get('Content-Disposition') is None:
+                    continue
+                if x%2:
+                    pass
+                else:
+                    a = str(part.get_payload(decode=True)).replace("\\r\\n","").split("Unit Location: ")
+                    b = a[1].split()
+                    c = b[5].split("CEPradius")
+                    self.coords[0] = float(b[2])
+                    self.coords[1] = float(c[0])
+                x += 1
+            self.m.store(num, '+FLAGS', '\Seen')
+
     def set_coords(self):
         imei = "300434063827480"
-        if not self.coords.empty():
-            coords = self.coords.get()
-            latitude = coords[0]
-            longitude = coords[1]
+        if self.coords != 0:
+            latitude = self.coords[0]
+            longitude = self.coords[1]
         else:
             return
         position_str = "{:.6f},{:.6f}".format(latitude, longitude) # Construct position
@@ -194,7 +224,6 @@ class BeaconMapper(object):
 
         # Assemble map center
         center = ("%.6f"%self.map_lat) + ',' + ("%.6f"%self.map_lon)
-
         # Update the Google Maps API StaticMap URL
         path_url = 'https://maps.googleapis.com/maps/api/staticmap?center=' # 54 chars
         path_url += center # 22 chars
@@ -214,11 +243,11 @@ class BeaconMapper(object):
         path_url += 'x'
         path_url += str(self.frame_height)
         path_url += '&maptype=' + self.map_type + '&format=png' # 35 chars
-        print(path_url)
         # Download the API map image from Google
         filename = "map_image.png" # Download map to this file
         try:
             if path_url != self.past_url:
+                print(path_url)
                 request.urlretrieve(path_url,filename)
             else:
                 return
@@ -309,17 +338,7 @@ class BeaconMapper(object):
             self.window.destroy() # Destroy the window
 
 if __name__ == "__main__":
-    d = Queue()
-    q = Queue()
-    mailer = mail.Mail()
-    p = Process(target = mailer.start, args=(d, q,))
-    a = Process(target= mailer.construction, args = (q,))
-    p.start()
-    a.start()
     try:
-        mapper = BeaconMapper(d)
+        mapper = BeaconMapper()
     except KeyboardInterrupt:
-        mailer.logout()
         mapper.window.destroy()
-        a.terminate()
-        p.terminate()

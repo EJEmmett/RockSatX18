@@ -36,8 +36,8 @@ class Mail():
     def start(self, d, q):
         coords = [None]*2
         while True:
-            typ, data = self.m.search(None, '(ON {0} SUBJECT "SBD Msg From Unit: 300434063827480" UNSEEN)'.format(strftime("%d-%b-%Y")))
-            #typ, data = self.m.search(None, '(ON 8-Aug-2018 SUBJECT "SBD Msg From Unit: 300434063827480" UNSEEN)')
+            #typ, data = self.m.search(None, '(ON {0} SUBJECT "SBD Msg From Unit: 300434063827480" UNSEEN)'.format(strftime("%d-%b-%Y")))
+            typ, data = self.m.search(None, '(ON 8-Aug-2018 SUBJECT "SBD Msg From Unit: 300434063827480" UNSEEN)')
             for num in data[0].split():
                 typ, message = self.m.fetch(num, '(RFC822)')
                 body = message[0][1]
@@ -49,7 +49,8 @@ class Mail():
                     if part.get('Content-Disposition') is None:
                         continue
                     if x%2:
-                        q.put(part.get_payload(decode=True).decode().split("["))
+                        pass
+                        #q.put(part.get_payload(decode=True).decode().split("["))
                     else:
                         a = str(part.get_payload(decode=True)).replace("\\r\\n","").split("Unit Location: ")
                         b = a[1].split()
